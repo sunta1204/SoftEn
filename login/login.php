@@ -19,13 +19,19 @@
   		$row2 = $stmt2->fetch();
 
   		if (!empty($row1)) {
+        $_SESSION["success"] = 1;
   			$_SESSION["username"] = $row1["l_username"];
   			$_SESSION["name"] = $row1["l_name"];
   			echo "<script type='text/javascript'> window.location.href = '../admin/admin_home.php';</script>"; 				
   		}
 		elseif (!empty($row2)) { 
+      $_SESSION["success"] = 1;
 			$_SESSION["username"] = $row2["s_id"];
 			$_SESSION["name"] = $row2["s_name"];
 			echo "<script type='text/javascript'> window.location.href = '../student/student_home.php';</script>";
 		} 
+    elseif (empty($row1) && empty($row2)) {
+      $_SESSION["loginError"] = 1;
+      echo "<script type='text/javascript'> window.location.href = '../index.php';</script>";
+    }
 	?>			

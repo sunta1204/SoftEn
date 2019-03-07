@@ -1,4 +1,4 @@
-<?php include 'connect.php'; ?>
+<?php include 'connect.php'; session_start(); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,6 +99,30 @@
 		  </div>
 		</div>
 	</form>
+
+	<?php 
+		if (!empty($_SESSION["loginError"])){ ?>
+			<script type="text/javascript">
+    			$(window).on('load',function(){
+        			$('#loginError').show('fade');
+        				setTimeout(function(){
+        					$('#loginError').alert('close');
+        				}, 2000);
+    				});
+    				$('#loginError').click(function(){
+    					$('loginError').alert('close');
+    				});
+			</script>
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="loginError">
+				<center>
+					<strong>Login Failed!</strong> กรุณาตรวจสอบ Username และ Password ของท่าน.
+				</center>				
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+	<?php } ?>
+	
 
 	<footer style="background-color: #747d8c; padding: 24px;">
 		<div style="text-align: center;">
