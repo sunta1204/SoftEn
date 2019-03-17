@@ -19,19 +19,21 @@
   		$row2 = $stmt2->fetch();
 
   		if (!empty($row1)) {
-        $_SESSION["success"] = 1;
+        setcookie('login_success',1,time()+5,'/');
   			$_SESSION["username"] = $row1["l_username"];
   			$_SESSION["name"] = $row1["l_name"];
+        $_SESSION["permission"] = $row1["permission"];
   			echo "<script type='text/javascript'> window.location.href = '../admin/admin_home.php';</script>"; 				
   		}
 		elseif (!empty($row2)) { 
-      $_SESSION["success"] = 1;
+      setcookie('login_success',1,time()+5,'/');
 			$_SESSION["username"] = $row2["s_id"];
 			$_SESSION["name"] = $row2["s_name"];
+      $_SESSION["permission"] = $row2["permission"];
 			echo "<script type='text/javascript'> window.location.href = '../student/student_home.php';</script>";
 		} 
     elseif (empty($row1) && empty($row2)) {
-      $_SESSION["loginError"] = 1;
+      setcookie('login_error',1,time()+5,'/');
       echo "<script type='text/javascript'> window.location.href = '../index.php';</script>";
     }
 	?>			

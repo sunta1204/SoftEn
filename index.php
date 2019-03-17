@@ -101,19 +101,42 @@
 	</form>
 
 	<?php 
-		if (!empty($_SESSION["loginError"])){ ?>
+		if (!empty($_COOKIE["wrong_login"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
-        			$('#loginError').show('fade');
+        			$('#wrong_login').show('fade');
         				setTimeout(function(){
-        					$('#loginError').alert('close');
-        				}, 2000);
+        					$('#wrong_login').alert('close');
+        				}, 3000);
     				});
-    				$('#loginError').click(function(){
-    					$('loginError').alert('close');
+    				$('#wrong_login').click(function(){
+    					$('wrong_login').alert('close');
     				});
 			</script>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="loginError">
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="wrong_login">
+				<center>
+					<strong>Wrong Login!</strong> กรุณาตรวจสอบทำรายการ
+				</center>				
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+	<?php } ?>
+
+	<?php 
+		if (!empty($_COOKIE["login_error"])){ ?>
+			<script type="text/javascript">
+    			$(window).on('load',function(){
+        			$('#login_error').show('fade');
+        				setTimeout(function(){
+        					$('#loginError').alert('close');
+        				}, 3000);
+    				});
+    				$('#login_error').click(function(){
+    					$('login_error').alert('close');
+    				});
+			</script>
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="login_error">
 				<center>
 					<strong>Login Failed!</strong> กรุณาตรวจสอบ Username และ Password ของท่าน.
 				</center>				
@@ -122,11 +145,38 @@
 				</button>
 			</div>
 	<?php } ?>
+
+	<?php 
+		if (!empty($_COOKIE["logout_success"])){ ?>
+			<script type="text/javascript">
+    			$(window).on('load',function(){
+        			$('#logout_success').show('fade');
+        				setTimeout(function(){
+        					$('#logout_success').alert('close');
+        				}, 3000);
+    				});
+    				$('#logout_success').click(function(){
+    					$('logout_success').alert('close');
+    				});
+			</script>
+			<div class="alert alert-success alert-dismissible fade show" role="alert" id="logout_success">
+				<center>
+					<strong>Logout Success!</strong>
+				</center>				
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+	<?php } ?>
+
+	<div class="container" style="padding-top: 50px;padding-bottom: 50px;min-height: 850px;">
+		
+	</div>
 	
 
 	<footer style="background-color: #747d8c; padding: 24px;">
 		<div style="text-align: center;">
-			<label style="font-size: 18px; color: white; padding: 9px;">@Copyright By Suriyapong Monkham</label>
+			<label style="font-size: 18px; color: white; padding: 9px;">@Copyright By 5 สหายคล้ายจะเป็นลม</label>
 		</div>		
 	</footer>
 
