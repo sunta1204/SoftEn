@@ -13,6 +13,7 @@
 
 	$pass = $_POST['c_password'];
 	$user = $_SESSION['username'];
+	$id = $_POST['id'];
 
 	$stmt2=$pdo->prepare("SELECT * FROM teacher WHERE l_username = ?");
 	$stmt2->bindParam(1,$_SESSION['username']);
@@ -29,17 +30,20 @@
 		 $stmt3->bindParam(4,$_POST['s_id']);
 		 $stmt3->bindParam(5,$_POST['s_name']);
 		 $stmt3->bindParam(6,$_POST['s_sec']);
-
-		if ($stmt3->execute()) {
-			setcookie('add_success',1,time()+5,'/');
-			echo "<script type='text/javascript'> window.location.href = 'admin_home.php';</script>";
-		} else {
-			setcookie('add_fail',1,time()+5,'/');
-			echo "<script type='text/javascript'> window.location.href = 'detail_class.php?c_id'".$rowCId['c_id']."'';</script>";
-		}
+?>
+<body>
+	<?php 
+		if ($stmt3->execute()) { 
+			setcookie('add_success',1,time()+5,'/');?>	
+			<script type='text/javascript'> window.location.href = 'detail_class.php?id=<?=$id?>&c_id=<?=$rowCId['c_id']?>';</script>
+		<?php } else {
+			setcookie('add_fail',1,time()+5,'/'); ?>
+			<script type='text/javascript'> window.location.href = 'detail_class.php?id=<?=$id?>&c_id=<?=$rowCId['c_id']?>';</script>
+		<?php } 
 
 	}elseif ($rowPass != $pass) {
-		setcookie('add_fail',1,time()+5,'/');
-		echo "<script type='text/javascript'> window.location.href = 'detail_class.php?c_id'".$rowCId['c_id']."'';</script>";
-	}
-?>
+		setcookie('add_fail',1,time()+5,'/'); ?>
+		<script type='text/javascript'> window.location.href = 'detail_class.php?id=<?=$id?>&c_id=<?=$rowCId['c_id']?>';</script>
+	<?php }
+	?>
+</body>

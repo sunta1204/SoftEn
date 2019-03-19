@@ -9,16 +9,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="https://cdn.rawgit.com/PascaleBeier/bootstrap-validate/v2.2.0/dist/bootstrap-validate.js"></script>
 </head>
 <body>
 	<!-- Navbar --> 
 	<nav class="navbar sticky-top navbar-light navbar-expand-lg" style="background-color: #747d8c;">
- 		<a class="navbar-brand text-light" href="#">CheckClassroom</a>
+ 		<a class="navbar-brand text-light" href="index.php">CheckClassroom</a>
   		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     		<span class="navbar-toggler-icon"></span>
     	</button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		    <ul class="navbar-nav mr-auto">
+		    	<!--
 		      <li class="nav-item active">
 		        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
 		      </li>
@@ -38,17 +40,17 @@
 		      </li>
 		      <li class="nav-item">
 		        <a class="nav-link disabled" href="#">Disabled</a>
-		      </li>
+		      </li> -->
 		    </ul>
 		    <div class="form-inline my-2 my-lg-0 mr-sm-2">
-		    	<button class="btn btn-primary mr-sm-3" data-target="#login" data-toggle="modal"> <i class="fas fa-location-arrow"></i> Login </button>
-		    	<button class="btn btn-warning " data-target="#register" data-toggle="modal"><i class="fas fa-registered"></i> Register </button>
+		    	<button id="login_button" class="btn btn-primary mr-sm-3" data-target="#login" data-toggle="modal"> <i class="fas fa-location-arrow"></i> Login </button>
+		    	<!--<button class="btn btn-warning " data-target="#register" data-toggle="modal"><i class="fas fa-registered"></i> Register </button> -->
 		    </div>
 		  </div>
 	</nav>
 
 	<!-- Modal login -->
-	<form action="login/login.php" method="post">
+	<form action="login/login.php" method="post" name="login" onSubmit="JavaScript:return fncSubmit();">
 		<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
@@ -60,25 +62,26 @@
 		      </div>
 		      	<div class="modal-body" style="background-color: #636e72; padding: 50px;">
 			       	<div class="inputBox">
-			       		<input type="text" name="username" required="" class="inputText">
-			       		<label class="text"> Username </label>
+			       		<label class="text-light" style="font-size: 20px;"> Username </label>
+			       		<input type="text" name="username" class="form-control" id="username" >
+			       		
 			       	</div>
 			       	<div class="inputBox">
-			       		<input type="password" name="password" required="" class="inputText">
-			       		<label class="text"> Password </label> 
+			       		<label class="text-light" style="font-size: 20px;"> Password </label> 
+			       		<input type="password" name="password" class="form-control" id="password" >		       		
 			       	</div>
 		      </div>		      
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		        <button type="submit" class="btn btn-primary" value="submitLogin">Submit</button>
+		        <button type="submit" class="btn btn-primary" value="submitLogin" id="submitLogin">Submit</button>
 		      </div>
 		    </div>
 		  </div>
 		</div>
 	</form>
 	
-	<!-- Modal Register -->
-	<form action="resgister/register.php" method="post">
+	<!-- Modal Register
+	<form action="resgister/register.php" method="post" name="">
 		<div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content">
@@ -98,7 +101,7 @@
 		    </div>
 		  </div>
 		</div>
-	</form>
+	</form> -->
 
 	<?php 
 		if (!empty($_COOKIE["wrong_login"])){ ?>
@@ -183,5 +186,25 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		function fncSubmit()
+		{
+			if(document.login.username.value == "")
+			{
+				alert('กรุณากรอก username');
+				document.login.username.focus();
+				return false;
+			}	
+			if(document.login.password.value == "")
+			{
+				alert('กรุณากรอก password');
+				document.login.password.focus();		
+				return false;
+			}
+			
+			document.login.submit();
+		}
+	</script>
 </body>
 </html>

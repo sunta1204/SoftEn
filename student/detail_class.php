@@ -10,8 +10,18 @@
 	 	$rowName["s_name"] = $row["s_name"];
 	 } 
 
-	$stmt2=$pdo->prepare("SELECT * FROM classroom");
+	$stmt2=$pdo->prepare("SELECT * FROM classroom WHERE c_id = ?");
+	$stmt2->bindParam(1,$_GET['c_id']);
 	$stmt2->execute();
+	while ($row2=$stmt2->fetch()) {
+		$rowCID['c_id'] =  $row2['c_id'];
+		$rowCNAME['c_name'] = $row2['c_name'];
+		$rowCTERM['c_term'] = $row2['c_term'];
+		$rowCYEAR['c_year'] = $row2['c_year'];
+		$rowCPASS['c_password'] = $row2['c_password'];
+	}
+
+	if (!empty($_SESSION['username']) && $_SESSION['permission'] == 3) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,12 +41,13 @@
 
 	<!-- Navbar --> 
 	<nav class="navbar sticky-top navbar-light navbar-expand-lg" style="background-color: #747d8c;">
- 		<a class="navbar-brand text-light" href="#">CheckClassroom</a>
+ 		<a class="navbar-brand text-light" href="student_home.php">CheckClassroom</a>
   		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     		<span class="navbar-toggler-icon"></span>
     	</button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		    <ul class="navbar-nav mr-auto">
+		    	<!--
 		      <li class="nav-item active">
 		        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
 		      </li>
@@ -56,7 +67,7 @@
 		      </li>
 		      <li class="nav-item">
 		        <a class="nav-link disabled" href="#">Disabled</a>
-		      </li>
+		      </li> -->
 		    </ul>
 		    <div class="form-inline my-2 my-lg-0 mr-sm-2 col-md-2">
 		    	<a href="" class="btn btn-primary  dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-user-tie"></i> <?= $_SESSION["name"] ?> </a>
@@ -80,10 +91,16 @@
 		          <span aria-hidden="true">&times;</span>
 		        </button>
 		      </div>
-		      	<div class="modal-body" style="background-color: #636e72; padding: 50px;">
-			       	<?= $rowUser["l_username"] ?><br>
-			       	<?= $rowPassword["l_password"] ?>
-		      </div>		      
+		      	<div class="modal-body" style="padding: 20px;">
+			       <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> ชื่อผู้ใช้ </label>
+			       		<input type="text" name="username" class="form-control" value="<?=$rowUser['s_id']?>" readonly>
+			       </div>
+			       <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> ชื่อ - นามสกุล </label>
+			       		<input type="text" name="username" class="form-control" value="<?=$rowName['s_name']?>" readonly>
+			       </div>	
+		      	</div>		      
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 		      </div>
@@ -92,7 +109,7 @@
 		</div>
 
 	<!-- Modal EDIT Profile -->
-	<form action="editPrfile.php" method="post">
+	<form action="edit_profile.php" method="post" name="edit_profile" onSubmit="JavaScript:return editSubmit();">
 	<div class="modal fade" id="editProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
@@ -102,46 +119,46 @@
 		          <span aria-hidden="true">&times;</span>
 		        </button>
 		      </div>
-		      	<div class="modal-body" style="background-color: #636e72; padding: 50px;">
-			       	<?= $rowUser["l_username"] ?><br>
-			       	<?= $rowPassword["l_password"] ?>
+		      	<div class="modal-body" style=" padding: 50px;">
+			       <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> ชื่อผู้ใช้ </label>
+			       		<input type="text" name="username" class="form-control" value="<?=$rowUser['s_id']?>" readonly>
+			       </div>
+			       <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> ชื่อ - นามสกุล </label>
+			       		<input type="text" name="name" class="form-control" value="<?=$rowName['s_name']?>">
+			       </div>	
+			        <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> รหัสผ่าน </label>
+			       		<input type="text" name="password" class="form-control" value="<?=$rowPassword['s_password']?>">
+			       </div>
 		      </div>		      
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Submit</button>
+		        <button type="submit" class="btn btn-primary" id="edit_submit"> Submit </button>
 		      </div>
 		    </div>
 		  </div>
 		</div>
 	</form>
 
-	<div style="min-height: 850px;background-color: #ecf0f1;">
-		<?php while ($row2=$stmt2->fetch()) { ?>
-			<div style="background-color: #feca57; padding-top: 20px; padding-bottom: 20px;">
+	<div style="min-height: 850px;background-color: #ecf0f1;">	
+			<div style="background-color: #BEBEBE; padding-top: 20px; padding-bottom: 20px;">
 				<div class="form-group" style="text-align: center;">
-					<label style="font-size: 30px;"> <?= $row2['c_id'] ?> </label> &nbsp; <label style="font-size: 30px;">  <?= $row2['c_name'] ?> </label>
+					<label style="font-size: 30px;"> <?= $rowCID['c_id'] ?> </label> &nbsp; <label style="font-size: 30px;">  <?= $rowCNAME['c_name'] ?> </label>
 				</div><br>
 				<div class="form-group" style="text-align: center;">
-					(&nbsp;<label style="font-size: 30px;"><?=$row2['c_term']?></label>&nbsp;/&nbsp;<label style="font-size: 30px;"><?=$row2['c_year']?></label>&nbsp;)
+					(&nbsp;<label style="font-size: 30px;"><?=$rowCTERM['c_term']?></label>&nbsp;/&nbsp;<label style="font-size: 30px;"><?=$rowCYEAR['c_year']?></label>&nbsp;)
 				</div>
 			</div>
-			<div style="background-color: #ff9ff3; min-height: 700px;width: 300px; padding-top: 50px;padding-bottom: 50px;">
+			<div style="background-color: #ced6e0; min-height: 700px;width: 300px; padding-top: 50px;padding-bottom: 50px;">	<!--
 				<div class="form-group mb-3 justify-content-center" style="text-align: center;">
-					<button class="btn btn-primary btn-lg col-10"> ดูรายชื่อนักศึกษา </button>
-				</div>				
+					<a  href="" class="btn btn-primary btn-lg col-10"> ดูยอดการเข้าชั้นเรียน </a>
+				</div>	-->		
 				<div class="form-group mb-3 justify-content-center" style="text-align: center;">
-					<button class="btn btn-primary btn-lg col-10"> ดูยอดการเข้าชั้นเรียน </button>
-				</div>
-				<?php if ($rowPer['permission'] == 1) { ?>
-					<div class="form-group mb-3 justify-content-center" style="text-align: center;">
-						<button class="btn btn-primary btn-lg col-10"> เพิ่มสิทธิ์การเข้าถึง </button>
-					</div>	
-				<?php } ?>
-				<div class="form-group mb-3 justify-content-center" style="text-align: center;">
-					<a href="admin_home.php" class="btn btn-danger btn-lg col-10"> ย้อนกลับ </a>
+					<a href="student_home.php" class="btn btn-danger btn-lg col-10"> ย้อนกลับ </a>
 				</div>				
 			</div>			
-		<?php } ?>
 	</div>
 
 
@@ -153,3 +170,8 @@
 
 </body>
 </html>
+
+<?php } else {
+		setcookie('wrong_login',1,time()+10,'/');
+		echo "<script type='text/javascript'> window.location.href = '../index.php';</script>";
+	} ?>

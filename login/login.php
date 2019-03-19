@@ -18,6 +18,12 @@
   		$stmt2->execute();
   		$row2 = $stmt2->fetch();
 
+      $stmt3 = $pdo->prepare("SELECT * FROM ta WHERE t_username = ? AND t_password = ?");
+      $stmt3->bindParam(1, $username);
+      $stmt3->bindParam(2, $password);
+      $stmt3->execute();
+      $row3 = $stmt3->fetch();
+
   		if (!empty($row1)) {
         setcookie('login_success',1,time()+5,'/');
   			$_SESSION["username"] = $row1["l_username"];
@@ -32,6 +38,13 @@
       $_SESSION["permission"] = $row2["permission"];
 			echo "<script type='text/javascript'> window.location.href = '../student/student_home.php';</script>";
 		} 
+    elseif (!empty($row3)) { 
+      setcookie('login_success',1,time()+5,'/');
+      $_SESSION["username"] = $row3["t_username"];
+      $_SESSION["name"] = $row3["t_name"];
+      $_SESSION["permission"] = $row3["permission"];
+      echo "<script type='text/javascript'> window.location.href = '../admin/admin_home.php';</script>";
+    } 
     elseif (empty($row1) && empty($row2)) {
       setcookie('login_error',1,time()+5,'/');
       echo "<script type='text/javascript'> window.location.href = '../index.php';</script>";
