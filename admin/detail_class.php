@@ -20,6 +20,7 @@
 		$rowCID['c_id'] =  $row2['c_id'];
 		$rowCNAME['c_name'] = $row2['c_name'];
 		$rowCTERM['c_term'] = $row2['c_term'];
+		$rowCSEC['c_sec'] = $row2['c_sec'];
 		$rowCYEAR['c_year'] = $row2['c_year'];
 		$rowCPASS['c_password'] = $row2['c_password'];
 	}
@@ -460,7 +461,7 @@
 	<div style="min-height: 850px;background-color: #ecf0f1;">
 		<div style="background-color: #BEBEBE; padding-top: 20px; padding-bottom: 20px;">
 						<div class="form-group" style="text-align: center;">
-							<label style="font-size: 30px;"> <?= $rowCID['c_id'] ?> </label> &nbsp; <label style="font-size: 30px;">  <?= $rowCNAME['c_name'] ?> </label>
+							<label style="font-size: 30px;"> <?= $rowCID['c_id'] ?> </label> &nbsp; <label style="font-size: 30px;">  <?= $rowCNAME['c_name'] ?> &nbsp; Section : <?=$rowCSEC['c_sec']?></label>
 						</div><br>
 						<div class="form-group" style="text-align: center;">
 							(&nbsp;<label style="font-size: 30px;"><?=$rowCTERM['c_term']?></label>&nbsp;/&nbsp;<label style="font-size: 30px;"><?=$rowCYEAR['c_year']?></label>&nbsp;)
@@ -469,11 +470,11 @@
 		<div style="display: flex;">
 					
 					<div style="background-color: #ced6e0; min-height: 700px;width: 300px; padding-top: 50px;padding-bottom: 50px;">
-						<div id="add_studen_button" class="form-group mb-3 justify-content-center" style="text-align: center; ">
+						<div class="form-group mb-3 justify-content-center" style="text-align: center; ">
 							<button id="add_student_button" data-target="#addStd" data-toggle="modal" class="btn btn-primary btn-lg col-10" style="background-color: #4682B4;"> เพิ่มนักศึกษา </button>
 						</div>	
-						<div id="add_news_button" class="form-group mb-3 justify-content-center" style="text-align: center; ">
-							<button id="add_student_button" data-target="#addnews" data-toggle="modal" class="btn btn-primary btn-lg col-10" style="background-color: #4682B4;"> เพิ่มข่าวสาร </button>
+						<div class="form-group mb-3 justify-content-center" style="text-align: center; ">
+							<button id="create_news_button" data-target="#addnews" data-toggle="modal" class="btn btn-primary btn-lg col-10" style="background-color: #4682B4;"> เพิ่มข่าวสาร </button>
 						</div>	
 						<div class="form-group mb-3 justify-content-center" style="text-align: center;">
 							<a href="admin_home.php" class="btn btn-danger btn-lg col-10"> ย้อนกลับ </a>
@@ -491,15 +492,15 @@
 								    <small class="card-text"> <?=$row4['n_date']?></small><br>
 								    <small class="card-text"> <?=$row4['l_name']?></small>
 								  </div>
-								  <div class="card-footer">
-								  	<button  data-target="#edit_news?id=<?=$row4['id']?>" data-toggle="modal" class="btn btn-warning"><i class="fas fa-edit"></i>&nbsp;แก้ไข</button>
+								  <div class="card-footer"><!--
+								  	<button  data-target="#edit_news?id=" data-toggle="modal" class="btn btn-warning"><i class="fas fa-edit"></i>&nbsp;แก้ไข</button> -->
 								  	<button  data-target="#delete_news?id=<?=$row4['id']?>" data-toggle="modal" class="btn btn-danger"><i class="fas fa-trash"></i>&nbsp;ลบ</button>
 								  </div>
 								</div>
 
-								<!-- Modal edit news -->
+								<!-- Modal edit news 
 								<form action="edit_news.php" method="post" name="edit_news_form" onSubmit="JavaScript:return editNews();">
-								<div class="modal fade" id="edit_news?id=<?=$row4['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal fade" id="edit_news?id=<?=$row4?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									  <div class="modal-dialog modal-dialog-centered" role="document">
 									    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
 									      <div class="modal-header">
@@ -509,16 +510,16 @@
 									        </button>
 									      </div>
 									      <div class="modal-body">
-									      	<input type="hidden" name="id" value="<?=$row4['id']?>">
-									      	<input type="hidden" name="classroom_id" value="<?=$rowID['id']?>">
-									      	<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+									      	<input type="hidden" name="id" value="<?=$row4?>">
+									      	<input type="hidden" name="classroom_id" value="<?=$rowID?>">
+									      	<input type="hidden" name="c_id" value="<?=$rowCID?>">
 										     <div class="form-inline"> 
 										     	<label class="text-primary mr-sm-4" style="font-size: 20px;"> หัวข้อเรื่อง : </label>
-										     	<input type="text" name="n_title" class="form-control" value="<?=$row4['n_title']?>">
+										     	<input type="text" name="n_title" class="form-control" value="<?=$row4?>">
 										     </div><br>
 										     <div class="form-inline"> 
 										     	<label class="text-primary mr-sm-4" style="font-size: 20px;"> รายละเอียด : </label>
-										     	<input type="text" name="n_description" class="form-control" value="<?=$row4['n_description']?>">
+										     	<textarea class="form-control" name="n_description"> <?=$row4?> </textarea>								     	
 										     </div><br>
 									      </div>		      
 									      <div class="modal-footer">
@@ -528,7 +529,7 @@
 									    </div>
 									  </div>
 									</div>
-								</form>
+								</form> -->
 
 								<!-- Modal delete news -->
 								<form action="delete_news.php" method="post" name="delete_news_form">
@@ -570,10 +571,17 @@
 			</div>
 
 			<!-- Modal Add student -->
+
+			<?php 
+				$stmt6=$pdo->prepare("SELECT * FROM student");
+				$stmt6->execute();
+			?>
+
+
 			<form action="add_student.php" method="post" name="add_student_form" onSubmit="JavaScript:return addStudent();">
-			<div class="modal fade" id="addStd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				  <div class="modal-dialog modal-dialog-centered" role="document">
-				    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
+			<div class="modal fade" id="addStd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+				  <div class="modal-dialog" role="document" >
+				    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;width: 600px;">
 				      <div class="modal-header">
 				        <h3 class="modal-title" id="exampleModalLabel">Add Student</h3>
 				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -583,18 +591,31 @@
 				      <div class="modal-body">
 				      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
 				      	<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
-					     <div class="form-group mb-4">
-					     	<label class="text-primary"> รหัสนักศึกษา : </label>
-					     	<input type="text" name="s_id" class="form-control" >
-					     </div>
-					     <div class="form-group mb-4">
-					     	<label class="text-primary"> ชื่อนักศึกษา : </label>
-					     	<input type="text" name="s_name" class="form-control" >
-					     </div>  
-					     <div class="form-group mb-4">
-					     	<label class="text-primary"> Section : </label>
-					     	<input type="text" name="s_sec" class="form-control" >
-					     </div>  
+					     <table class="table table-hover">
+					     	<thead>
+					     		<tr>
+					     			<th>รหัสนักศึกษา</th>
+					     			<th>ชื่อ-นามสกุล</th>
+					     			<th>สาขาวิชา</th>
+					     			<th></th>
+					     		</tr>
+					     	</thead>
+					     	<tbody>
+					     		<?php $i=0; while ($row6=$stmt6->fetch()) { ?>
+					     			<tr>
+						     			<td><input type="hidden" name="s_id[]" value="<?=$row6['s_id']?>"><?=$row6['s_id']?></td>
+						     			<td><input type="hidden" name="s_name[]" value="<?=$row6['s_name']?>"><?=$row6['s_name']?></td>
+						     			<td><input type="hidden" name="s_department[]" value="<?=$row6['s_department']?>"><?=$row6['s_department']?></td>
+						     			<td>
+						     				
+											  <input type="checkbox" name="Ch_INSERT[]" id="Ch_INSERT" value="<?=$i++?>">
+											 
+											</div>
+										</td>
+						     		</tr>
+					     		<?php } ?>				     		
+					     	</tbody>
+					     </table>
 					     <div class="form-group mb-4">
 					     	<label class="text-primary"> Code : </label>
 					     	<input type="text" name="c_password" class="form-control"  value="<?=$rowCPASS['c_password']?>" readonly>
@@ -602,7 +623,7 @@
 				      </div>		      
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				        <button type="submit" class="btn btn-primary" id="create_class_submit"> Submit </button>
+				        <button type="submit" class="btn btn-primary" id="SAVE" name="add_student_submit[]" value="SAVE"> Submit </button>
 				      </div>
 				    </div>
 				  </div>
@@ -627,11 +648,11 @@
 				      	<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
 					     <div class="from-group mb-4">
 					     	<label class="text-primary"> หัวข้อเรื่อง : </label>
-					     	<input type="text" name="n_title" class="form-control">
+					     	<input type="text" name="n_title" id="n_title<?=$rowID['id']?>" class="form-control">
 					     </div>
 					     <div class="from-group mb-4">
 					     	<label class="text-primary"> รายละเอียด : </label>
-					     	<input type="text" name="n_description" class="form-control" >
+					     	<textarea name="n_description" id="n_description<?=$rowID['id']?>" class="form-control"></textarea>
 					     </div>  
 				      </div>		      
 				      <div class="modal-footer">

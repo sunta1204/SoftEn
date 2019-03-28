@@ -350,6 +350,29 @@
 	<?php } ?>
 
 	<?php 
+		if (!empty($_COOKIE["create_class_same"])){ ?>
+			<script type="text/javascript">
+    			$(window).on('load',function(){
+        			$('#create_error').alert('fade');
+        				setTimeout(function(){
+        					$('#create_error').alert('close');
+        				}, 3000);
+    				});
+    				$('#create_error').click(function(){
+    					$('create_error').alert('close');
+    				});
+			</script>
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="create_error">
+				<center>
+					<strong>Create Class Failed !</strong> class ซ้ำ กรุณาลองใหม่
+				</center>				
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+	<?php } ?>
+
+	<?php 
 		if (!empty($_COOKIE["edit_success"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
@@ -493,16 +516,25 @@
 				<?php while ($row2=$stmt2->fetch()) {?>
 				<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
 				<div class="card  bg-info zoomclass mb-4">
-					<a id="detail_class.php?id=<?=$row2['id']?>" href="detail_class.php?id=<?=$row2['id']?>&c_id=<?=$row2['c_id']?>">
+					<a id="detail_class.php?id=<?=$row2['id']?>" href="detail_class.php?id=<?=$row2['id']?>&c_id=<?=$row2['c_id']?>&c_sec=<?=$row2['c_sec']?>">
 						<div class="card-header" style=" margin-top: 5px;">
 							<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row2['c_id']?> </p>
 						</div>
 						<div class="card-body" style="margin-top: 5px;">
 							<div class="from-group mr-sm-2">
 								<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row2['c_name']?> </p>
-							</div>	
-							<div class="from-group mr-sm-2">	
-								<p class="card-text text-white" style="font-size: 20px;"> ภาคเรียน : <?=$row2['c_term']?> </p>
+							</div>
+							<div class="from-group mr-sm-2">
+								<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row2['c_sec']?> </p>
+							</div>		
+							<div class="from-group mr-sm-2">
+							<?php if ($row2['c_term'] == 1) { ?>
+								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
+							<?php } elseif ($row2['c_term'] == 2) { ?>
+								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
+							<?php } elseif ($row2['c_term'] == 3) { ?>
+								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
+							<?php } ?>								
 							</div>
 							<div class="from-group mr-sm-2">	
 								<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row2['c_year']?> </p>
@@ -537,28 +569,28 @@
 				      	<input type="hidden" name="id" class="form-control col-12"  value="<?=$row2['id']?>">
 					     <div class="form-group mb-4">
 					     	<label class="text-primary mb-2"> รหัสวิชา : </label>
-					     	<input type="text" name="class_id" id="class_id"  class="form-control col-12"  value="<?=$row2['c_id']?>">
+					     	<input type="text" name="class_id" id="class_id<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_id']?>">
 					     </div>
 					     <div class="form-group mb-4">
 					     	<label class="text-primary mb-2"> ชื่อคลาส : </label>
-					     	<input type="text" name="class_name" id="class_name"  class="form-control col-12"  value="<?=$row2['c_name']?>"> 
+					     	<input type="text" name="class_name" id="class_name<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_name']?>"> 
 					     </div>  
 					     <div class="form-group mb-4">
 					     	<label class="text-primary mb-2"> ปีการศึกษา : </label>
-					     	<input type="text" name="class_year" id="class_year"  class="form-control col-12"  value="<?=$row2['c_year']?>">
+					     	<input type="text" name="class_year" id="class_year<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_year']?>">
 					     </div>  
 					     <div class="form-group mb-4">
 					     	<label class="text-primary mb-2"> ภาคการเรียน : </label>
-					     	<input type="text" name="class_term" id="class_term"  class="form-control col-12"  value="<?=$row2['c_term']?>">
+					     	<input type="text" name="class_term" id="class_term<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_term']?>">
 					     </div>  
 					     <div class="form-group mb-4">
 					     	<label class="text-primary mb-2"> รหัส Join คลาส : </label>
-					     	<input type="text" name="class_password" id="class_password"  class="form-control col-12" value="<?=$row2['c_password']?>">
+					     	<input type="text" name="class_password" id="class_password<?=$row2['id']?>"  class="form-control col-12" value="<?=$row2['c_password']?>">
 					     </div>
 					   </div>    	    
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				        <button type="submit" class="btn btn-primary" id="edit_class_submit" name="edit_class_submit"> แก้ไขคลาส </button>
+				        <button type="submit" class="btn btn-primary" id="edit_class_submit<?=$row2['id']?>" name="edit_class_submit<?=$row2['id']?>"> แก้ไขคลาส </button>
 				      </div>
 				    </div>
 				  </div>
@@ -583,7 +615,7 @@
 					   </div>    	    
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				        <button type="submit" class="btn btn-danger" id="delete_class_submit"> ลบคลาส </button>
+				        <button type="submit" class="btn btn-danger" id="delete_class_submit<?=$row2['id']?>"> ลบคลาส </button>
 				      </div>
 				    </div>
 				  </div>
@@ -724,27 +756,49 @@
 			     	<input type="text" name="c_id" class="form-control" id="c_id" >
 			     </div>
 			     <div class="form-group mb-4">
-			     	<label class="text-primary"> ชื่อคลาส : </label>
+			     	<label class="text-primary"> ชื่อรายวิชา : </label>
 			     	<input type="text" name="c_name" class="form-control" >
-			     </div>  
+			     </div> 
+			     <?php date_default_timezone_set('Asia/Bangkok');
+						$date = date('Y'); 
+						$dateThai = $date + 542;
+				?> 
 			     <div class="form-group mb-4">
 			     	<label class="text-primary"> ปีการศึกษา : </label>
-			     	<input type="text" name="c_year" class="form-control" >
-			     </div>  
-			     <div class="form-group mb-4">
-			     	<label class="text-primary"> ภาคการเรียน : </label>
-			     	<input type="text" name="c_term" class="form-control" >
-			     </div>
-			     <div class="form-group mb-4">
-			     	<label class="text-primary"> อาจารย์ผู้สอน : </label>
-			     	<select class="form-control" name="l_username">
-			     		<?php while ($row3=$stmt3->fetch()) { ?>
-			     			<option value="<?=$row3['l_username']?>"> <?=$row3['l_name']?> </option>
+			     	<select class="form-control" name="c_year">
+			     		<?php for ($i=$dateThai; $i <= 3000 ; $i++) { ?>
+			     			<option value="<?=$i?>"> <?=$i?> </option>
 			     		<?php } ?>
 			     	</select>
 			     </div>  
 			     <div class="form-group mb-4">
-			     	<label class="text-primary"> รหัส Join คลาส : </label>
+			     	<label class="text-primary"> ภาคการศึกษา : </label>
+			     	<select class="form-control" name="c_term">
+			     		<option value="1"> เทอมต้น </option>
+			     		<option value="2"> เทอมปลาย </option>
+			     		<option value="3"> ภาคฤดูร้อน </option>
+			     	</select>
+			     </div>
+			      <div class="form-group mb-4">
+			     	<label class="text-primary"> Section : </label>
+			     	<select class="form-control" name="c_sec">
+			     		<?php for ($sec=1; $sec <=200 ; $sec++) { ?>
+			     			<option value="<?=$sec?>"> <?=$sec?> </option>
+			     		<?php } ?>
+			     	</select>
+			     </div>
+			     <?php if ($_SESSION['permission'] == 2) { ?>
+			     	<div class="form-group mb-4">
+				     	<label class="text-primary"> อาจารย์ผู้สอน : </label>
+				     	<select class="form-control" name="l_username">
+				     		<?php while ($row3=$stmt3->fetch()) { ?>
+				     			<option value="<?=$row3['l_username']?>"> <?=$row3['l_name']?> </option>
+				     		<?php } ?>
+				     	</select>
+			     	</div>  
+			     <?php } ?> 	     
+			     <div class="form-group mb-4">
+			     	<label class="text-primary"> รหัส Join Class : </label>
 			     	<?php $pass = uniqid(); ?>
 			     	<input type="text" name="c_password" class="form-control" value="<?=$pass?>">
 			     </div>    	

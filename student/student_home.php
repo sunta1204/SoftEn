@@ -231,7 +231,7 @@
 			</script>
 			<div class="alert alert-success alert-dismissible fade show" role="alert" id="edit_profile_success">
 				<center>
-					<strong>Edit Class Success !</strong> 
+					<strong>Edit Profile Success !</strong> 
 				</center>				
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -254,7 +254,7 @@
 			</script>
 			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="edit_profile_error">
 				<center>
-					<strong>Edit Class Failed !</strong> กรุณาลองใหม่อีกครั้ง
+					<strong>Edit Profile Failed !</strong> กรุณาลองใหม่อีกครั้ง
 				</center>				
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -265,8 +265,8 @@
 	<div style="padding-top: 50px;padding-bottom: 50px;min-height: 850px;background-color: #ecf0f1;">
 		<div class="form-inline d-flex " style="margin-left: 20px;">
 			<?php while ($row2=$stmt2->fetch()) {?>
-				<div class="card-deck my-2 my-lg-0 mr-sm-2">
-				<div class="card bg-info zoomclass">
+				<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
+				<div class="card bg-info zoomclass mb-4">
 					<a href="detail_class.php?c_id=<?=$row2['c_id']?>">
 						<div class="card-header">
 								<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row2['c_id']?> </p>

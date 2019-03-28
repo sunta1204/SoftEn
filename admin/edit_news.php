@@ -5,7 +5,7 @@
 	date_default_timezone_set('Asia/Bangkok');
 	$date = date('d/m/Y-h:i:sa');
 
-	$id = $_POST['id'];
+	$id = $_POST['classroom_id'];
 	$c_id = $_POST['c_id'];
 
 	$stmt=$pdo->prepare("UPDATE news SET n_title = ? , n_description = ? , n_date = ?  WHERE id = ? ");

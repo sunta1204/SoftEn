@@ -21,6 +21,10 @@
 		$rowCPASS['c_password'] = $row2['c_password'];
 	}
 
+	$stmt3=$pdo->prepare("SELECT * FROM news WHERE c_id = ? ");
+	$stmt3->bindParam(1,$_GET['c_id']);
+	$stmt3->execute();
+
 	if (!empty($_SESSION['username']) && $_SESSION['permission'] == 3) {
 ?>
 <!DOCTYPE html>
@@ -158,7 +162,27 @@
 				<div class="form-group mb-3 justify-content-center" style="text-align: center;">
 					<a href="student_home.php" class="btn btn-danger btn-lg col-10"> ย้อนกลับ </a>
 				</div>				
-			</div>			
+			</div>
+
+			<div style="background-color:#f1f2f6;min-width: 85%;min-height: 500px;padding: 50px;">
+						<div class="form-inline">
+							<?php while ($row3=$stmt3->fetch()) { ?>
+								
+									<div class="card zoomnews text-white bg-dark mb-3 mr-sm-4" style="max-width: 500px;min-width: 300px;min-height: 300px;max-height: 500px;transition: transform .2s;">
+								  <div class="card-header"><?=$row3['n_title']?></div>
+								  <div class="card-body">
+								    <p class="card-text"> <?=$row3['n_description']?></p><br>
+								    <small class="card-text"> <?=$row3['n_date']?></small><br>
+								    <small class="card-text"> <?=$row3['l_name']?></small>
+								  </div>
+								  <div class="card-footer">
+								  	
+								  </div>
+								</div>
+								
+							<?php } ?>
+						</div>
+
 	</div>
 
 
