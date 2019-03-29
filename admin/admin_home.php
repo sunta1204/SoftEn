@@ -512,6 +512,7 @@
 
 	<div style="padding-top: 50px;padding-bottom: 50px;min-height: 850px;background-color: #ecf0f1;">
 		<div class="form-inline d-flex " style="margin-left: 20px;">
+
 			<?php if ($_SESSION['permission'] == 1) { ?>
 				<?php while ($row2=$stmt2->fetch()) {?>
 				<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
@@ -628,16 +629,25 @@
 				<?php while ($row5=$stmt5->fetch()) {?>
 				<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
 				<div class="card  bg-info zoomclass mb-4">
-					<a id="detail_class.php?id=<?=$row2['id']?>" href="detail_class.php?id=<?=$row5['id']?>&c_id=<?=$row5['c_id']?>">
+					<a id="detail_class.php?id=<?=$row2['id']?>" href="detail_class.php?id=<?=$row5['id']?>&c_id=<?=$row5['c_id']?>&c_sec=<?=$row5['c_sec']?>">
 						<div class="card-header" style=" margin-top: 5px;">
 							<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row5['c_id']?> </p>
 						</div>
 						<div class="card-body" style="margin-top: 5px;">
 							<div class="from-group mr-sm-2">
 								<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row5['c_name']?> </p>
-							</div>	
-							<div class="from-group mr-sm-2">	
-								<p class="card-text text-white" style="font-size: 20px;"> ภาคเรียน : <?=$row5['c_term']?> </p>
+							</div>
+							<div class="from-group mr-sm-2">
+								<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row5['c_sec']?> </p>
+							</div>		
+							<div class="from-group mr-sm-2">
+							<?php if ($row5['c_term'] == 1) { ?>
+								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
+							<?php } elseif ($row5['c_term'] == 2) { ?>
+								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
+							<?php } elseif ($row5['c_term'] == 3) { ?>
+								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
+							<?php } ?>								
 							</div>
 							<div class="from-group mr-sm-2">	
 								<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row5['c_year']?> </p>
@@ -671,21 +681,61 @@
 				      <div class="modal-body">
 				      	<input type="hidden" name="id" class="form-control col-12"  value="<?=$row5['id']?>">
 					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> รหัสวิชา : </label>
-					     	<input type="text" name="class_id" id="class_id"  class="form-control col-12"  value="<?=$row5['c_id']?>">
+					     	<label class="text-primary"> รหัสวิชา : </label>
+					     	<input type="text" name="class_id" class="form-control" id="c_id" value="<?=$row5['c_id']?>">
 					     </div>
 					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> ชื่อคลาส : </label>
-					     	<input type="text" name="class_name" id="class_name"  class="form-control col-12"  value="<?=$row5['c_name']?>"> 
+					     	<label class="text-primary"> ชื่อรายวิชา : </label>
+					     	<input type="text" name="class_name" class="form-control" value="<?=$row5['c_name']?>">
+					     </div> 
+					     <?php date_default_timezone_set('Asia/Bangkok');
+								$date = date('Y'); 
+								$dateThai = $date + 543;
+						?> 
+					     <div class="form-group mb-4">
+					     	<label class="text-primary"> ปีการศึกษา : </label>
+					     	<select class="form-control" name="class_year">
+					     		<option selected="" value="<?=$row5['c_year']?>"> <?=$row5['c_year']?> </option>
+					     		<?php for ($i=$dateThai; $i <= 3000 ; $i++) { ?>
+					     			<option value="<?=$i?>"> <?=$i?> </option>
+					     		<?php } ?>
+					     	</select>
 					     </div>  
 					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> ปีการศึกษา : </label>
-					     	<input type="text" name="class_year" id="class_year"  class="form-control col-12"  value="<?=$row5['c_year']?>">
-					     </div>  
-					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> ภาคการเรียน : </label>
-					     	<input type="text" name="class_term" id="class_term"  class="form-control col-12"  value="<?=$row5['c_term']?>">
-					     </div>  
+					     	<label class="text-primary"> ภาคการศึกษา : </label>
+					     	<select class="form-control" name="class_term">
+					     		<option selected="" value="<?=$row5['c_term']?>"> <?php if ($row5['c_term'] == 1) { ?>
+					     			เทอมต้น
+					     		<?php } elseif ($row5['c_term'] == 2) { ?>
+					     			เทอมปลาย
+					     		<?php } elseif ($row5['c_term'] == 3) { ?>
+					     			ภาคฤดูร้อน
+					     		<?php } ?> </option>
+					     		<option value="1"> เทอมต้น </option>
+					     		<option value="2"> เทอมปลาย </option>
+					     		<option value="3"> ภาคฤดูร้อน </option>
+					     	</select>
+					     </div>
+					      <div class="form-group mb-4">
+					     	<label class="text-primary"> Section : </label>
+					     	<select class="form-control" name="class_sec">
+					     		<option selected="" value="<?=$row5['c_sec']?>"> <?=$row5['c_sec']?> </option>
+					     		<?php for ($sec=1; $sec <=200 ; $sec++) { ?>
+					     			<option value="<?=$sec?>"> <?=$sec?> </option>
+					     		<?php } ?>
+					     	</select>
+					     </div>
+					     <?php if ($_SESSION['permission'] == 2) { ?>
+					     	<div class="form-group mb-4">
+						     	<label class="text-primary"> อาจารย์ผู้สอน : </label>
+						     	<select class="form-control" name="l_username">
+						     		<option selected="" value="<?=$row5['l_username']?>"> <?=$row5['l_username']?> </option>
+						     		<?php while ($row3=$stmt3->fetch()) { ?>
+						     			<option value="<?=$row3['l_username']?>"> <?=$row3['l_name']?> </option>
+						     		<?php } ?>
+						     	</select>
+					     	</div>  
+					     <?php } ?> 	       
 					     <div class="form-group mb-4">
 					     	<label class="text-primary mb-2"> รหัส Join คลาส : </label>
 					     	<input type="text" name="class_password" id="class_password"  class="form-control col-12" value="<?=$row5['c_password']?>">

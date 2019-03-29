@@ -2,8 +2,8 @@
 	session_start();
 	include '../connect.php';
 
-	$stmt=$pdo->prepare("SELECT c_id , c_name , c_password , c_sec , c_year , c_term FROM classroom WHERE c_id = ?");
-	$stmt->bindParam(1,$_POST['c_id']);
+	$stmt=$pdo->prepare("SELECT c_id , c_name , c_password , c_sec , c_year , c_term FROM classroom WHERE id = ?");
+	$stmt->bindParam(1,$_POST['id']);
 	$stmt->execute();
 	while ($row=$stmt->fetch()) {
 		$rowCId['c_id'] = $row['c_id'];
@@ -17,6 +17,8 @@
 	$pass = $_POST['c_password'];
 	$user = $_SESSION['username'];
 	$id = $_POST['id'];
+	$c_id = $_POST['c_id'];
+	$c_sec = $_POST['c_sec'];
 
 	$stmt2=$pdo->prepare("SELECT * FROM teacher WHERE l_username = ?");
 	$stmt2->bindParam(1,$_SESSION['username']);
@@ -34,65 +36,60 @@
 		$rowTUSER1['t_username'] = $row4['t_username'];
 	}
 
-	if ($_SESSION['permission'] == 1) {
+	
+
+	
+		if ($_SESSION['permission'] == 2) {
 		if ($rowPass['c_password'] == $pass) {
-		 $stmt3=$pdo->prepare("INSERT INTO enroll (c_id,c_name,c_year,c_term,c_sec,l_name,l_username,s_id,s_name,s_sec) VALUES (?,?,?,?,?,?,?,?,?,?)");
-		 $stmt3->bindParam(1,$_POST['c_id']);
-		 $stmt3->bindParam(2,$rowCName['c_name']);
-		 $stmt3->bindParam(3,$rowCYear['c_year']);
-		 $stmt3->bindParam(4,$rowCTerm['c_term']);
-		 $stmt3->bindParam(5,$rowCSec['c_sec']);
-		 $stmt3->bindParam(6,$rowLName['l_name']);
-		 $stmt3->bindParam(7,$rowLUSER['l_username']);
-		 $stmt3->bindParam(8,$_POST['s_id']);
-		 $stmt3->bindParam(9,$_POST['s_name']);
-		 $stmt3->bindParam(10,$_POST['s_sec']);
-		?>
-		<body>
-			<?php 
-				if ($stmt3->execute()) { 
-					setcookie('add_success',1,time()+5,'/');?>	
-					<script type='text/javascript'> window.location.href = 'detail_class.php?id=<?=$id?>&c_id=<?=$rowCId['c_id']?>';</script>
-				<?php } else {
-					setcookie('add_fail',1,time()+5,'/'); ?>
-					<script type='text/javascript'> window.location.href = 'detail_class.php?id=<?=$id?>&c_id=<?=$rowCId['c_id']?>';</script>
-				<?php } 
+			foreach ($_POST['Ch_INSERT'] as $Ch_INSERT) {
+				if ($_POST['Ch_INSERT'] != "") {
 
-			}elseif ($rowPass != $pass) {
-				setcookie('add_fail',1,time()+5,'/'); ?>
-				<script type='text/javascript'> window.location.href = 'detail_class.php?id=<?=$id?>&c_id=<?=$rowCId['c_id']?>';</script>
-			<?php } ?>
-		</body>
+					$stmt5=$pdo->prepare("SELECT * FROM enroll WHERE c_id = ? AND c_name = ? AND c_sec = ? AND c_year = ? AND c_term = ? AND s_id = ? AND s_name = ? AND s_department = ?");
+					$stmt5->bindParam(1,$_POST['c_id']);
+					$stmt5->bindParam(2,$rowCName['c_name']);
+					$stmt5->bindParam(3,$rowCSec['c_sec']);
+					$stmt5->bindParam(4,$rowCYear['c_year']);
+					$stmt5->bindParam(5,$rowCTerm['c_term']);
+					$stmt5->bindParam(6,$_POST['s_id'][$Ch_INSERT]);
+					$stmt5->bindParam(7,$_POST['s_name'][$Ch_INSERT]);
+					$stmt5->bindParam(8,$_POST['s_department'][$Ch_INSERT]);
+					$stmt5->execute();
+					$rowCount2=$stmt5->rowCount();
 
-	<?php } elseif ($_SESSION['permission'] == 2) {
-		if ($rowPass['c_password'] == $pass) {
-		 $stmt5=$pdo->prepare("INSERT INTO enroll (c_id,c_name,c_year,c_term,c_sec,t_name,t_username,s_id,s_name,s_sec) VALUES (?,?,?,?,?,?,?,?,?,?)");
-		 $stmt5->bindParam(1,$_POST['c_id']);
-		 $stmt5->bindParam(2,$rowCName['c_name']);
-		 $stmt5->bindParam(3,$rowCYear['c_year']);
-		 $stmt5->bindParam(4,$rowCTerm['c_term']);
-		 $stmt5->bindParam(5,$rowCSec['c_sec']);
-		 $stmt5->bindParam(6,$rowTName1['t_name']);
-		 $stmt5->bindParam(7,$rowTUSER1['t_username']);
-		 $stmt5->bindParam(8,$_POST['s_id']);
-		 $stmt5->bindParam(9,$_POST['s_name']);
-		 $stmt5->bindParam(10,$_POST['s_sec']);
-		?>
-		<body>
-			<?php 
-				if ($stmt5->execute()) { 
-					setcookie('add_success',1,time()+5,'/');?>	
-					<script type='text/javascript'> window.location.href = 'detail_class.php?id=<?=$id?>&c_id=<?=$rowCId['c_id']?>';</script>
-				<?php } else {
-					setcookie('add_fail',1,time()+5,'/'); ?>
-					<script type='text/javascript'> window.location.href = 'detail_class.php?id=<?=$id?>&c_id=<?=$rowCId['c_id']?>';</script>
-				<?php } 
+					if ($rowCount2 > 0) {
+						setcookie('add_student_same',1,time()+5,'/');
+						echo "<script type='text/javascript'>window.location.href='detail_class.php?id=$id&c_id=$c_id&c_sec=$c_sec';</script>";
+					} else {
+						$stmt3=$pdo->prepare("INSERT INTO enroll (c_id,c_name,c_year,c_term,c_sec,l_name,l_username,s_id,s_name,s_department) VALUES (?,?,?,?,?,?,?,?,?,?)");
+											 $stmt3->bindParam(1,$_POST['c_id']);
+											 $stmt3->bindParam(2,$rowCName['c_name']);
+											 $stmt3->bindParam(3,$rowCYear['c_year']);
+											 $stmt3->bindParam(4,$rowCTerm['c_term']);
+											 $stmt3->bindParam(5,$rowCSec['c_sec']);
+											 $stmt3->bindParam(6,$rowLName['l_name']);
+											 $stmt3->bindParam(7,$rowLUSER['l_username']);
+											 $stmt3->bindParam(8,$_POST['s_id'][$Ch_INSERT]);
+											 $stmt3->bindParam(9,$_POST['s_name'][$Ch_INSERT]);
+											 $stmt3->bindParam(10,$_POST['s_department'][$Ch_INSERT]);
 
-			}elseif ($rowPass != $pass) {
-				setcookie('add_fail',1,time()+5,'/'); ?>
-				<script type='text/javascript'> window.location.href = 'detail_class.php?id=<?=$id?>&c_id=<?=$rowCId['c_id']?>';</script>
-			<?php } ?>
-		</body>
-	<?php }
+											 $stmt3->execute();
+										} 
+									}	
+									$rowCount=$stmt3->rowCount();
+									if ($rowCount > 0) {
+										setcookie('add_student_success',1,time()+5,'/');
+										echo "<script type='text/javascript'>window.location.href='detail_class.php?id=$id&c_id=$c_id&c_sec=$c_sec';</script>";
+									}
+
+					}
+
+					
+		} elseif ($rowPass['c_password'] != $pass) {
+			setcookie('add_student_fail',1,time()+5,'/');
+			echo "<script type='text/javascript'>window.location.href='detail_class.php?id=$id&c_id=$c_id&c_sec=$c_sec';</script>";
+			}
+		} 
+
+	
 ?>
 	

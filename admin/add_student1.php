@@ -32,22 +32,19 @@
 		$rowLUSER1['t_username'] = $row4['t_username'];
 	}
 
- 	for ($i=0; $i < count($_POST['Ch_INSERT']); $i++) { 
- 		if ($_POST['Ch_INSERT'] != "") {
-
- 			$stmt5=$pdo->prepare("INSERT INTO enroll (c_id , c_name , c_sec , l_username , l_name , s_id , s_name , s_department) VALUES (?,?,?,?,?,?,?,?)");
+	foreach ($_POST['Ch_INSERT'] as $Ch_INSERT) {
+		$stmt5=$pdo->prepare("INSERT INTO enroll (c_id , c_name , c_sec , l_username , l_name , s_id , s_name , s_department) VALUES (?,?,?,?,?,?,?,?)");
  			$stmt5->bindParam(1,$rowCId['c_id']);
  			$stmt5->bindParam(2,$rowCName['c_name']);
  			$stmt5->bindParam(3,$rowCSec['c_sec']);
  			$stmt5->bindParam(4,$rowLUSER['l_username']);
  			$stmt5->bindParam(5,$rowLName['l_name']);
- 			$stmt5->bindParam(6,$_POST['s_id'][$i]);
- 			$stmt5->bindParam(7,$_POST['s_name'][$i]);
- 			$stmt5->bindParam(8,$_POST['s_department'][$i]);
+ 			$stmt5->bindParam(6,$_POST['s_id'][$Ch_INSERT]);
+ 			$stmt5->bindParam(7,$_POST['s_name'][$Ch_INSERT]);
+ 			$stmt5->bindParam(8,$_POST['s_department'][$Ch_INSERT]);
 
  			$stmt5->execute();
- 		}
- 	}
+	}
 		echo "<script type='text/javascript'> window.location.href = 'admin_home.php';</script>";
 ?>
 	
