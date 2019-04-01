@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2019 at 11:30 AM
+-- Generation Time: Mar 29, 2019 at 04:13 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -80,20 +80,18 @@ CREATE TABLE `enroll` (
   `t_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `s_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `s_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `s_department` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+  `s_department` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `status` int(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `enroll`
 --
 
-INSERT INTO `enroll` (`enroll_id`, `c_id`, `c_name`, `c_sec`, `c_year`, `c_term`, `l_name`, `l_username`, `t_username`, `t_name`, `s_id`, `s_name`, `s_department`) VALUES
-(74, '050108', 'ENGLISH FOR SCIENCES', 1, '2561', 1, 'อ.ดร.ชิตสุธา สุ่มเล็ก', 'chitsutha', NULL, NULL, '593020470-6', 'นายสุริยพงศ์ มอญขาม', 'วิทยาการคอมพิวเตอร์'),
-(75, '050108', 'ENGLISH FOR SCIENCES', 1, '2561', 1, 'อ.ดร.ชิตสุธา สุ่มเล็ก', 'chitsutha', NULL, NULL, '593021265-2', 'นายกษิดิศ ไกรศรีวรรธนะ', 'วิทยาการคอมพิวเตอร์'),
-(76, '050108', 'ENGLISH FOR SCIENCES', 3, '', 0, 'อ.ดร.ชิตสุธา สุ่มเล็ก', 'chitsutha', NULL, NULL, '593020145-5', 'gjhgjgjhg', 'hgjhgjhgj'),
-(77, '050108', 'ENGLISH FOR SCIENCES', 3, '', 0, 'อ.ดร.ชิตสุธา สุ่มเล็ก', 'chitsutha', NULL, NULL, '593020470-6', 'นายสุริยพงศ์ มอญขาม', 'วิทยาการคอมพิวเตอร์'),
-(78, '050108', 'ENGLISH FOR SCIENCES', 3, '', 0, 'อ.ดร.ชิตสุธา สุ่มเล็ก', 'chitsutha', NULL, NULL, '593021265-2', 'นายกษิดิศ ไกรศรีวรรธนะ', 'วิทยาการคอมพิวเตอร์'),
-(79, '050108', 'ENGLISH FOR SCIENCES', 3, '', 0, 'อ.ดร.ชิตสุธา สุ่มเล็ก', 'chitsutha', NULL, NULL, '593020145-5', 'gjhgjgjhg', 'hgjhgjhgj');
+INSERT INTO `enroll` (`enroll_id`, `c_id`, `c_name`, `c_sec`, `c_year`, `c_term`, `l_name`, `l_username`, `t_username`, `t_name`, `s_id`, `s_name`, `s_department`, `status`) VALUES
+(100, '050108', 'ENGLISH FOR SCIENCES', 1, '2561', 1, NULL, NULL, NULL, NULL, '593020470-6', 'นายสุริยพงศ์ มอญขาม', 'วิทยาการคอมพิวเตอร์', 1),
+(101, '050108', 'ENGLISH FOR SCIENCES', 1, '2561', 1, NULL, NULL, NULL, NULL, '593021265-2', 'นายกษิดิศ ไกรศรีวรรธนะ', 'วิทยาการคอมพิวเตอร์', 1),
+(102, '050108', 'ENGLISH FOR SCIENCES', 1, '2561', 1, NULL, NULL, NULL, NULL, '593020145-5', 'gjhgjgjhg', 'hgjhgjhgj', 1);
 
 -- --------------------------------------------------------
 
@@ -239,7 +237,7 @@ ALTER TABLE `classroom`
 -- AUTO_INCREMENT for table `enroll`
 --
 ALTER TABLE `enroll`
-  MODIFY `enroll_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `enroll_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 --
 -- AUTO_INCREMENT for table `news`
 --

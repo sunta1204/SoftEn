@@ -28,6 +28,9 @@
 	$stmt5->bindParam(1,$rowUser1['t_username']);
 	$stmt5->execute();
 
+	$stmt6=$pdo->prepare("SELECT * FROM teacher");
+	$stmt6->execute();
+
 	$stmt3=$pdo->prepare("SELECT * FROM teacher WHERE permission = 1");
 	$stmt3->execute();
 
@@ -76,27 +79,7 @@
     	</button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent" >
 		    <ul class="navbar-nav mr-auto">
-		    	<!--
-		      <li class="nav-item active">
-		        <a class="nav-link" href="#" style="color: #D3D3D3" >Home <span class="sr-only">(current)</span></a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="#" style="color: #D3D3D3" >Link</a>
-		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #D3D3D3" >
-		          Dropdown
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="#">Action</a>
-		          <a class="dropdown-item" href="#">Another action</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="#">Something else here</a>
-		        </div>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link disabled" href="#" style="color: #D3D3D3" >Disabled</a>
-		      </li> -->
+		    	
 		    </ul>
 		    <div class="form-inline my-2 my-lg-0 mr-sm-2  col-3">
 		    	<a href="" class="btn btn-primary  dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-user-tie"></i> <?= $rowName["l_name"] ?> </a>
@@ -128,7 +111,11 @@
 			       <div class="form-group">
 			       		<label class="text-primary" style="font-size: 20px;"> ชื่อ - นามสกุล </label>
 			       		<input type="text" name="username" class="form-control" value="<?=$rowName['l_name']?>" readonly>
-			       </div>	
+			       </div>
+			        <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> ตำแหน่ง </label>
+			       		<input type="text" name="permission" class="form-control" value="อาจารย์" readonly>
+			       </div>		
 		      	</div>		      
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -179,29 +166,9 @@
     	</button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent" >
 		    <ul class="navbar-nav mr-auto">
-		    	<!--
-		      <li class="nav-item active">
-		        <a class="nav-link" href="#" style="color: #D3D3D3" >Home <span class="sr-only">(current)</span></a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="#" style="color: #D3D3D3" >Link</a>
-		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #D3D3D3" >
-		          Dropdown
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="#">Action</a>
-		          <a class="dropdown-item" href="#">Another action</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="#">Something else here</a>
-		        </div>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link disabled" href="#" style="color: #D3D3D3" >Disabled</a>
-		      </li> -->
+		    	
 		    </ul>
-		    <div class="form-inline my-2 my-lg-0 mr-sm-2 col-md-2">
+		    <div class="form-inline my-2 my-lg-0 mr-sm-2  col-3">
 		    	<a href="" class="btn btn-primary  dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-user-tie"></i> <?= $rowName1["t_name"] ?> </a>
 		    	<div class="dropdown-menu col-10">
 		    		<button class="dropdown-item" data-target="#profile1" data-toggle="modal"> ข้อมูลส่วนตัว </button>
@@ -232,6 +199,10 @@
 			       		<label class="text-primary" style="font-size: 20px;"> ชื่อ - นามสกุล </label>
 			       		<input type="text" name="username" class="form-control" value="<?=$rowName1['t_name']?>" readonly>
 			       </div>	
+			        <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> ตำแหน่ง </label>
+			       		<input type="text" name="permission" class="form-control" value="ผู้ช่วยสอน" readonly>
+			       </div>		
 		      	</div>		      
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -652,6 +623,9 @@
 							<div class="from-group mr-sm-2">	
 								<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row5['c_year']?> </p>
 							</div>
+							<div class="from-group mr-sm-2">	
+								<p class="card-text text-white" style="font-size: 20px;"> อาจารย์ประจำวิชา : <?=$row5['l_name']?> </p>
+							</div>
 							<div class="from-group mr-sm-2">
 								<p class="card-text text-white" style="font-size: 20px;"> รหัส Join : <?=$row5['c_password']?> </p>	
 							</div>									 
@@ -682,19 +656,19 @@
 				      	<input type="hidden" name="id" class="form-control col-12"  value="<?=$row5['id']?>">
 					     <div class="form-group mb-4">
 					     	<label class="text-primary"> รหัสวิชา : </label>
-					     	<input type="text" name="class_id" class="form-control" id="c_id" value="<?=$row5['c_id']?>">
+					     	<input type="text" name="class_id" class="form-control" id="class_id<?=$row5['id']?>" value="<?=$row5['c_id']?>">
 					     </div>
 					     <div class="form-group mb-4">
 					     	<label class="text-primary"> ชื่อรายวิชา : </label>
-					     	<input type="text" name="class_name" class="form-control" value="<?=$row5['c_name']?>">
+					     	<input type="text" name="class_name" class="form-control" id="class_name<?=$row5['id']?>" value="<?=$row5['c_name']?>">
 					     </div> 
 					     <?php date_default_timezone_set('Asia/Bangkok');
 								$date = date('Y'); 
-								$dateThai = $date + 543;
+								$dateThai = $date + 542;
 						?> 
 					     <div class="form-group mb-4">
 					     	<label class="text-primary"> ปีการศึกษา : </label>
-					     	<select class="form-control" name="class_year">
+					     	<select class="form-control" name="class_year" id="class_year<?=$row5['id']?>">
 					     		<option selected="" value="<?=$row5['c_year']?>"> <?=$row5['c_year']?> </option>
 					     		<?php for ($i=$dateThai; $i <= 3000 ; $i++) { ?>
 					     			<option value="<?=$i?>"> <?=$i?> </option>
@@ -703,7 +677,7 @@
 					     </div>  
 					     <div class="form-group mb-4">
 					     	<label class="text-primary"> ภาคการศึกษา : </label>
-					     	<select class="form-control" name="class_term">
+					     	<select class="form-control" name="class_term" id="class_term<?=$row5['id']?>">
 					     		<option selected="" value="<?=$row5['c_term']?>"> <?php if ($row5['c_term'] == 1) { ?>
 					     			เทอมต้น
 					     		<?php } elseif ($row5['c_term'] == 2) { ?>
@@ -718,7 +692,7 @@
 					     </div>
 					      <div class="form-group mb-4">
 					     	<label class="text-primary"> Section : </label>
-					     	<select class="form-control" name="class_sec">
+					     	<select class="form-control" name="class_sec" id="class_sec<?=$row5['id']?>">
 					     		<option selected="" value="<?=$row5['c_sec']?>"> <?=$row5['c_sec']?> </option>
 					     		<?php for ($sec=1; $sec <=200 ; $sec++) { ?>
 					     			<option value="<?=$sec?>"> <?=$sec?> </option>
@@ -728,10 +702,10 @@
 					     <?php if ($_SESSION['permission'] == 2) { ?>
 					     	<div class="form-group mb-4">
 						     	<label class="text-primary"> อาจารย์ผู้สอน : </label>
-						     	<select class="form-control" name="l_username">
-						     		<option selected="" value="<?=$row5['l_username']?>"> <?=$row5['l_username']?> </option>
-						     		<?php while ($row3=$stmt3->fetch()) { ?>
-						     			<option value="<?=$row3['l_username']?>"> <?=$row3['l_name']?> </option>
+						     	<select class="form-control" name="l_username" id="l_username<?=$row5['id']?>">
+						     		<option selected="" value="<?=$row5['l_username']?>"> <?=$row5['l_name']?> </option>
+						     		<?php while ($row6=$stmt6->fetch()) { ?>
+						     			<option value="<?=$row6['l_username']?>"> <?=$row6['l_name']?> </option>
 						     		<?php } ?>
 						     	</select>
 					     	</div>  
@@ -743,7 +717,7 @@
 					   </div>    	    
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				        <button type="submit" class="btn btn-primary" id="edit_class_submit" name="edit_class_submit"> แก้ไขคลาส </button>
+				        <button type="submit" class="btn btn-primary" id="edit_class_submit<?=$row5['id']?>" name="edit_class_submit"> แก้ไขคลาส </button>
 				      </div>
 				    </div>
 				  </div>
@@ -777,6 +751,7 @@
 			<?php } ?>
 			<?php } ?>
 
+
 			<div class="card-deck my-2 my-lg-0 mr-sm-2">
 				<div class="card bg-light zoom">
 					<button id="create_class_button" data-target="#create_class" data-toggle="modal" class="btn btn-light">
@@ -803,11 +778,11 @@
 		      <div class="modal-body">
 			     <div class="form-group mb-4">
 			     	<label class="text-primary"> รหัสวิชา : </label>
-			     	<input type="text" name="c_id" class="form-control" id="c_id" >
+			     	<input type="text" name="c_id" class="form-control" id="c_id">
 			     </div>
 			     <div class="form-group mb-4">
 			     	<label class="text-primary"> ชื่อรายวิชา : </label>
-			     	<input type="text" name="c_name" class="form-control" >
+			     	<input type="text" name="c_name" class="form-control" id="c_name">
 			     </div> 
 			     <?php date_default_timezone_set('Asia/Bangkok');
 						$date = date('Y'); 
@@ -815,7 +790,7 @@
 				?> 
 			     <div class="form-group mb-4">
 			     	<label class="text-primary"> ปีการศึกษา : </label>
-			     	<select class="form-control" name="c_year">
+			     	<select class="form-control" name="c_year" id="c_year">
 			     		<?php for ($i=$dateThai; $i <= 3000 ; $i++) { ?>
 			     			<option value="<?=$i?>"> <?=$i?> </option>
 			     		<?php } ?>
@@ -823,7 +798,7 @@
 			     </div>  
 			     <div class="form-group mb-4">
 			     	<label class="text-primary"> ภาคการศึกษา : </label>
-			     	<select class="form-control" name="c_term">
+			     	<select class="form-control" name="c_term" id="c_term">
 			     		<option value="1"> เทอมต้น </option>
 			     		<option value="2"> เทอมปลาย </option>
 			     		<option value="3"> ภาคฤดูร้อน </option>
@@ -831,7 +806,7 @@
 			     </div>
 			      <div class="form-group mb-4">
 			     	<label class="text-primary"> Section : </label>
-			     	<select class="form-control" name="c_sec">
+			     	<select class="form-control" name="c_sec" id="c_sec">
 			     		<?php for ($sec=1; $sec <=200 ; $sec++) { ?>
 			     			<option value="<?=$sec?>"> <?=$sec?> </option>
 			     		<?php } ?>
@@ -840,7 +815,7 @@
 			     <?php if ($_SESSION['permission'] == 2) { ?>
 			     	<div class="form-group mb-4">
 				     	<label class="text-primary"> อาจารย์ผู้สอน : </label>
-				     	<select class="form-control" name="l_username">
+				     	<select class="form-control" name="l_username" id="l_username">
 				     		<?php while ($row3=$stmt3->fetch()) { ?>
 				     			<option value="<?=$row3['l_username']?>"> <?=$row3['l_name']?> </option>
 				     		<?php } ?>

@@ -50,6 +50,12 @@
 	$stmt7->bindParam(5,$rowCNAME['c_name']);
 	$stmt7->execute();
 
+	$stmt8 = $pdo->prepare("SELECT c_sec FROM classroom WHERE c_id = ? AND c_year = ? AND c_term = ?");
+	$stmt8->bindParam(1,$_GET['c_id']);
+	$stmt8->bindParam(2,$rowCYEAR['c_year']);
+	$stmt8->bindParam(3,$rowCTERM['c_term']);
+	$stmt8->execute();
+
 	if (!empty($_SESSION['username']) && $_SESSION['permission'] == 1 || $_SESSION['permission'] == 2) { ?>
 
 <!DOCTYPE html>
@@ -83,27 +89,6 @@
     	</button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent" >
 		    <ul class="navbar-nav mr-auto">
-		    	<!--
-		      <li class="nav-item active">
-		        <a class="nav-link" href="#" style="color: #D3D3D3" >Home <span class="sr-only">(current)</span></a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="#" style="color: #D3D3D3" >Link</a>
-		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #D3D3D3" >
-		          Dropdown
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="#">Action</a>
-		          <a class="dropdown-item" href="#">Another action</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="#">Something else here</a>
-		        </div>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link disabled" href="#" style="color: #D3D3D3" >Disabled</a>
-		      </li> -->
 		    </ul>
 		    <div class="form-inline my-2 my-lg-0 mr-sm-2 col-md-2">
 		    	<a href="" class="btn btn-primary  dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-user-tie"></i> <?= $rowName["l_name"] ?> </a>
@@ -136,6 +121,10 @@
 			       		<label class="text-primary" style="font-size: 20px;"> ชื่อ - นามสกุล </label>
 			       		<input type="text" name="username" class="form-control" value="<?=$rowName['l_name']?>" readonly>
 			       </div>	
+			       <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> ตำแหน่ง </label>
+			       		<input type="text" name="permission" class="form-control" value="อาจารย์" readonly>
+			       </div>		
 		      	</div>		      
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -186,29 +175,9 @@
     	</button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent" >
 		    <ul class="navbar-nav mr-auto">
-		    	<!--
-		      <li class="nav-item active">
-		        <a class="nav-link" href="#" style="color: #D3D3D3" >Home <span class="sr-only">(current)</span></a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="#" style="color: #D3D3D3" >Link</a>
-		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #D3D3D3" >
-		          Dropdown
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="#">Action</a>
-		          <a class="dropdown-item" href="#">Another action</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="#">Something else here</a>
-		        </div>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link disabled" href="#" style="color: #D3D3D3" >Disabled</a>
-		      </li> -->
+		
 		    </ul>
-		    <div class="form-inline my-2 my-lg-0 mr-sm-2 col-md-2">
+		    <div class="form-inline my-2 my-lg-0 mr-sm-2  col-3">
 		    	<a href="" class="btn btn-primary  dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-user-tie"></i> <?= $rowName1["t_name"] ?> </a>
 		    	<div class="dropdown-menu col-10">
 		    		<button class="dropdown-item" data-target="#profile1" data-toggle="modal"> ข้อมูลส่วนตัว </button>
@@ -239,6 +208,10 @@
 			       		<label class="text-primary" style="font-size: 20px;"> ชื่อ - นามสกุล </label>
 			       		<input type="text" name="username" class="form-control" value="<?=$rowName1['t_name']?>" readonly>
 			       </div>	
+			       <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> ตำแหน่ง </label>
+			       		<input type="text" name="permission" class="form-control" value="ผู้ช่วยสอน" readonly>
+			       </div>		
 		      	</div>		      
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -352,21 +325,21 @@
 	<?php } ?>
 
 	<?php 
-		if (!empty($_COOKIE["add_news_success"])){ ?>
+		if (!empty($_COOKIE["edit_student_success"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
-        			$('#add_news_success').alert('fade');
+        			$('#edit_student_success').alert('fade');
         				setTimeout(function(){
-        					$('#add_news_success').alert('close');
+        					$('#edit_student_success').alert('close');
         				}, 3000);
     				});
-    				$('#add_news_success').click(function(){
-    					$('add_news_success').alert('close');
+    				$('#edit_student_success').click(function(){
+    					$('edit_student_success').alert('close');
     				});
 			</script>
-			<div class="alert alert-success alert-dismissible fade show" role="alert" id="add_news_success">
+			<div class="alert alert-success alert-dismissible fade show" role="alert" id="edit_student_success">
 				<center>
-					<strong>Add News Success!</strong>
+					<strong>Edit Student Success!</strong>
 				</center>				
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -375,21 +348,21 @@
 	<?php } ?>
 
 	<?php 
-		if (!empty($_COOKIE["add_news_error"])){ ?>
+		if (!empty($_COOKIE["edit_student_error"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
-        			$('#add_news_error').alert('fade');
+        			$('#edit_student_error').alert('fade');
         				setTimeout(function(){
-        					$('#add_news_error').alert('close');
+        					$('#edit_student_error').alert('close');
         				}, 3000);
     				});
-    				$('#add_news_error').click(function(){
-    					$('add_news_error').alert('close');
+    				$('#edit_student_error').click(function(){
+    					$('edit_student_error').alert('close');
     				});
 			</script>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_news_error">
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="edit_student_error">
 				<center>
-					<strong>Add News Failed!</strong> กรุณาลองใหม่อีกครั้ง
+					<strong>Edit Student Failed!</strong> กรุณาลองใหม่อีกครั้ง
 				</center>				
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -398,21 +371,21 @@
 	<?php } ?>
 
 	<?php 
-		if (!empty($_COOKIE["edit_news_success"])){ ?>
+		if (!empty($_COOKIE["delete_student_success"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
-        			$('#edit_news_success').alert('fade');
+        			$('#delete_student_success').alert('fade');
         				setTimeout(function(){
-        					$('#edit_news_success').alert('close');
+        					$('#delete_student_success').alert('close');
         				}, 3000);
     				});
-    				$('#edit_news_success').click(function(){
-    					$('edit_news_success').alert('close');
+    				$('#delete_student_success').click(function(){
+    					$('delete_student_success').alert('close');
     				});
 			</script>
-			<div class="alert alert-success alert-dismissible fade show" role="alert" id="edit_news_success">
+			<div class="alert alert-success alert-dismissible fade show" role="alert" id="delete_student_success">
 				<center>
-					<strong>Edit News Success!</strong>
+					<strong>Delete Student Success!</strong>
 				</center>				
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -421,21 +394,21 @@
 	<?php } ?>
 
 	<?php 
-		if (!empty($_COOKIE["edit_news_error"])){ ?>
+		if (!empty($_COOKIE["delete_student_fail"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
-        			$('#edit_news_error').alert('fade');
+        			$('#delete_student_fail').alert('fade');
         				setTimeout(function(){
-        					$('#edit_news_error').alert('close');
+        					$('#delete_student_fail').alert('close');
         				}, 3000);
     				});
-    				$('#edit_news_error').click(function(){
-    					$('edit_news_error').alert('close');
+    				$('#delete_student_fail').click(function(){
+    					$('delete_student_fail').alert('close');
     				});
 			</script>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="edit_news_error">
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="delete_student_fail">
 				<center>
-					<strong>Edit News Failed!</strong> กรุณาลองใหม่อีกครั้ง
+					<strong>Delete Student Failed!</strong> กรุณาลองใหม่อีกครั้ง
 				</center>				
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -443,51 +416,8 @@
 			</div>
 	<?php } ?>
 
-	<?php 
-		if (!empty($_COOKIE["delete_news_success"])){ ?>
-			<script type="text/javascript">
-    			$(window).on('load',function(){
-        			$('#delete_news_success').alert('fade');
-        				setTimeout(function(){
-        					$('#delete_news_success').alert('close');
-        				}, 3000);
-    				});
-    				$('#delete_news_success').click(function(){
-    					$('delete_news_success').alert('close');
-    				});
-			</script>
-			<div class="alert alert-success alert-dismissible fade show" role="alert" id="delete_news_success">
-				<center>
-					<strong>Delete News Success!</strong>
-				</center>				
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-	<?php } ?>
 
-	<?php 
-		if (!empty($_COOKIE["delete_news_error"])){ ?>
-			<script type="text/javascript">
-    			$(window).on('load',function(){
-        			$('#delete_news_error').alert('fade');
-        				setTimeout(function(){
-        					$('#delete_news_error').alert('close');
-        				}, 3000);
-    				});
-    				$('#delete_news_error').click(function(){
-    					$('delete_news_error').alert('close');
-    				});
-			</script>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="delete_news_error">
-				<center>
-					<strong>Delete News Failed!</strong> กรุณาลองใหม่อีกครั้ง
-				</center>				
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-	<?php } ?>
+	
 
 	<div style="min-height: 850px;background-color: #ecf0f1;">
 		<div style="background-color: #BEBEBE; padding-top: 20px; padding-bottom: 20px;">
@@ -503,7 +433,10 @@
 					<div style="background-color: #ced6e0; min-height: 700px;width: 300px; padding-top: 50px;padding-bottom: 50px;">
 						<div class="form-group mb-3 justify-content-center" style="text-align: center; ">
 							<button id="add_student_button" data-target="#addStd" data-toggle="modal" class="btn btn-primary btn-lg col-10" style="background-color: #4682B4;"> เพิ่มนักศึกษา </button>
-						</div>	
+						</div>
+						<div class="form-group mb-3 justify-content-center" style="text-align: center; ">
+							<button id="add_student_file_button" data-target="#add_student_file_modal" data-toggle="modal" class="btn btn-primary btn-lg col-10" style="background-color: #4682B4;"> อัพโหลดข้อมูลนักศึกษา </button>
+						</div>		
 						
 						<div class="form-group mb-3 justify-content-center" style="text-align: center;">
 							<a href="admin_home.php" class="btn btn-danger btn-lg col-10"> ย้อนกลับ </a>
@@ -511,9 +444,9 @@
 					</div>
 
 					<div style="background-color:#f1f2f6;min-width: 85%;min-height: 500px;padding: 50px;">
-						
+						<div class="table-responsive">
 						<table class="table table-hover">
-							<thead class="text-primary" style="font-size: 20px;">
+							<thead class="text-primary thead-light" style="font-size: 20px;">
 								<tr>
 									<th>รหัสนักศึกษา</th>
 									<th>ชื่อ-นามสกุล</th>
@@ -523,25 +456,56 @@
 								</tr>
 							</thead>
 							<tbody style="font-size: 16px;">
+								
 								<?php while ($row7=$stmt7->fetch()) { ?>
+									
 									<tr>
 										<td><?=$row7['s_id']?></td>
 										<td><?=$row7['s_name']?></td>
 										<td><?=$row7['s_department']?></td>
 										<?php if ($row7['status'] == 1) { ?>
-											<td>ลงทะเบียน</td>
+											<td class="text-success">ลงทะเบียน</td>
 										<?php }if ($row7['status'] == 2) { ?>
-											<td>ถอนรายวิชา</td>
+											<td class="text-warning">ถอนรายวิชา</td>
 										<?php }if ($row7['status'] == 3) { ?>
-											<td>ลาออก</td>
+											<td class="text-danger">ลาออก</td>
 										<?php } ?>								
 										<td> 
-											<button class="btn btn-warning" data-toggle="modal" data-target="#edit_student<?=$row7['s_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข</button>
+											<button class="btn btn-warning" data-toggle="modal" data-target="#edit_student<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข</button> &nbsp;||&nbsp;
+											<button class="btn btn-danger" data-toggle="modal" data-target="#delete_student<?=$row7['enroll_id']?>"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;ลบ</button>
 										</td>
 									</tr>
 
-									<form action="edit_student.php" name="edit_student_form" method="post">
-										<div class="modal fade" id="edit_student<?=$row7['s_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+									<!-- Modal Delete Student  -->
+									<form action="delete_student.php" name="edit_student_form" method="post">
+										<div class="modal fade" id="delete_student<?=$row7['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+										  <div class="modal-dialog modal-dialog-centered" role="document">
+										    <div class="modal-content">
+										      <div class="modal-header">
+										        <h5 class="modal-title" id="exampleModalLongTitle">Delete Student</h5>
+										        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										          <span aria-hidden="true">&times;</span>
+										        </button>
+										      </div>
+										      <div class="modal-body">
+										      	<input type="hidden" name="enroll_id" value="<?=$row7['enroll_id']?>">
+										      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+				      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+				      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+												<label class="text-primary" style="font-size: 20px;"> แน่ใจหรือไม่ที่จะลบ : </label>&nbsp;&nbsp;<label class="text-danger"><?=$row7['s_id']?>&nbsp;<?=$row7['s_name']?> </label>
+										      </div>
+										      <div class="modal-footer">
+										        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+										        <button type="submit" class="btn btn-primary" id="delete_submit_button">ลบ</button>
+										      </div>
+										    </div>
+										  </div>
+										</div>
+									</form>
+								
+									<!-- Modal Edit Student  -->
+									<form action="edit_student_form.php" name="edit_student_form<?=$row7['enroll_id']?>" method="post">
+										<div class="modal fade" id="edit_student<?=$row7['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 										  <div class="modal-dialog modal-dialog-centered" role="document">
 										    <div class="modal-content">
 										      <div class="modal-header">
@@ -551,42 +515,16 @@
 										        </button>
 										      </div>
 										      <div class="modal-body">
-										        <div class="form-group">
-										        	<label class="text-primary" style="font-size: 20px;"> รหัสนักศึกษา </label>
-										        	<input type="text" name="s_id" class="form-control" readonly="" value="<?=$row7['s_id']?>">
-										        </div><br>
-										        <div class="form-group">
-										        	<label class="text-primary" style="font-size: 20px;"> ชื่อ-นามสกุล </label>
-										        	<input type="text" name="s_name" class="form-control" readonly="" value="<?=$row7['s_name']?>">
-										        </div><br>
-										        <div class="form-group">
-										        	<label class="text-primary" style="font-size: 20px;"> สาขาวิชา </label>
-										        	<input type="text" name="s_department" class="form-control" readonly="" value="<?=$row7['s_department']?>">
-										        </div><br>
-										        <div class="form-group">
-										        	<label class="text-primary" style="font-size: 20px;"> สถานะ </label>
-										        	<?php if ($row7['status'] == 1) { ?>
-										        		<select name="status" class="form-control">
-										        			<option value="1" selected=""> ลงทะเบียน </option>
-										        			<option value="2"> ถอนรายวิชา </option>
-										        			<option value="3"> ลาออก </option>
-										        		</select>
-										        	<?php } elseif ($row7['status'] == 2) { ?>
-										        		<select name="status" class="form-control">
-										        			<option value="2" selected=""> ถอนรายวิชา </option>
-										        			<option value="1"> ลงทะเบียน </option>
-										        			<option value="3"> ลาออก </option>
-										        		</select>
-										        	<?php } elseif ($row7['status'] == 3) { ?>
-										        		<select name="status" class="form-control">
-										        			<option value="3" selected=""> ลาออก </option>
-										        			<option value="1"> ลงทะเบียน </option>
-										        			<option value="2"> ถอนรายวิชา </option>
-										        		</select>
-										        	<?php } ?>
-										        </div><br>
-
+										      	<input type="hidden" name="enroll_id" value="<?=$row7['enroll_id']?>">
+										      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+				      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+				      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+				      							<input type="hidden" name="c_year" value="<?=$rowCYEAR['c_year']?>">
+				      							<input type="hidden" name="c_term" value="<?=$rowCTERM['c_term']?>">
+										        <label class="text-primary" style="font-size: 20px;">ไปที่หน้าแก้ไขข้อมูลของ : </label>&nbsp;&nbsp; <label class="text-danger" style="font-size: 18px;"><?=$row7['s_name']?></label>
 										      </div>
+
+										      
 										      <div class="modal-footer">
 										        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
 										        <button type="submit" class="btn btn-primary" id="edit_submit_button">แก้ไข</button>
@@ -595,11 +533,47 @@
 										  </div>
 										</div>
 									</form>
-								<?php } ?>			
+
+								<?php } ?>	
+
 							</tbody>
 						</table>
+						</div>
 					</div>			
 			</div>
+
+			<!-- Modal Add Student By file -->
+		<form action="add_student_file.php" method="post" name="add_student_file" id="add_student_file" enctype="multipart/form-data">
+			<div class="modal fade" id="add_student_file_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+				  <div class="modal-dialog" role="document" >
+				    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;width: 600px;">
+				      <div class="modal-header">
+				        <h3 class="modal-title" id="exampleModalLabel">Add Student</h3>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+				      	<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+				      	<input type="hidden" name="c_name" value="<?=$rowCNAME['c_name']?>">
+				      	<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+				      	<input type="hidden" name="c_year" value="<?=$rowCYEAR['c_year']?>">
+				      	<input type="hidden" name="c_term" value="<?=$rowCTERM['c_term']?>">
+				      	<div class="form-group">
+				      		<label class="text-primary" style="font-size: 20px;">เพิ่มข้อมูลนักศึกษา</label>
+				      		<input type="file" name="student_file" id="student_file" accept=".xls,.xlsx,.csv" class="form-control mr-sm-2">
+				      	</div>
+					     
+				      </div>		      
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				        <button type="submit" name="submit_student_button" id="submit_student_button" class="btn btn-primary"> submit </button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+		</form>
 			
 
 			<!-- Modal Add student -->
@@ -610,7 +584,7 @@
 			?>
 
 
-			<form action="add_student.php" method="post" name="add_student_form" onSubmit="JavaScript:return addStudent();">
+			<form action="add_student1.php" method="post" name="add_student_form" onSubmit="JavaScript:return addStudent();">
 			<div class="modal fade" id="addStd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
 				  <div class="modal-dialog" role="document" >
 				    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;width: 600px;">
@@ -634,14 +608,14 @@
 					     		</tr>
 					     	</thead>
 					     	<tbody>
-					     		<?php $i=0; while ($row6=$stmt6->fetch()) { ?>
+					     		<?php $i=0; $k=0; while ($row6=$stmt6->fetch()) { ?>
 					     			<tr>
 						     			<td><input type="hidden" name="s_id[]" value="<?=$row6['s_id']?>"><?=$row6['s_id']?></td>
 						     			<td><input type="hidden" name="s_name[]" value="<?=$row6['s_name']?>"><?=$row6['s_name']?></td>
 						     			<td><input type="hidden" name="s_department[]" value="<?=$row6['s_department']?>"><?=$row6['s_department']?></td>
 						     			<td>
 						     				
-											  <input type="checkbox" name="Ch_INSERT[]" id="Ch_INSERT" value="<?=$i++?>">
+											  <input type="checkbox" name="Ch_INSERT[]" id="Ch_INSERT<?=$k++?>" value="<?=$i++?>">
 											 
 											</div>
 										</td>
@@ -662,11 +636,7 @@
 				  </div>
 				</div>
 			</form>
-
-
 		</div>
-		
-
 
 	<footer style="background-color: #747d8c; padding: 24px;">
 		<div style="text-align: center;">

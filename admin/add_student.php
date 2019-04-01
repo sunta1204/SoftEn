@@ -79,6 +79,9 @@
 									if ($rowCount > 0) {
 										setcookie('add_student_success',1,time()+5,'/');
 										echo "<script type='text/javascript'>window.location.href='detail_class.php?id=$id&c_id=$c_id&c_sec=$c_sec';</script>";
+									} else {
+										setcookie('add_student_fail',1,time()+5,'/');
+										echo "<script type='text/javascript'>window.location.href='detail_class.php?id=$id&c_id=$c_id&c_sec=$c_sec';</script>";
 									}
 
 					}

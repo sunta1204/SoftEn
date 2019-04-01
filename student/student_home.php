@@ -127,7 +127,11 @@
 			       <div class="form-group">
 			       		<label class="text-primary" style="font-size: 20px;"> ชื่อ - นามสกุล </label>
 			       		<input type="text" name="username" class="form-control" value="<?=$rowName['s_name']?>" readonly>
-			       </div>	
+			       </div>
+			       <div class="form-group">
+			       		<label class="text-primary" style="font-size: 20px;"> ตำแหน่ง </label>
+			       		<input type="text" name="permission" class="form-control" value="นักศึกษา" readonly>
+			       </div>			
 		      	</div>		      
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
