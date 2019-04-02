@@ -316,7 +316,7 @@
 			</script>
 			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_fail">
 				<center>
-					<strong>Add Student Failed!</strong> มีข้อมูลนักศึกษาใน class นี้แล้ว
+					<strong>Add Student Failed!</strong> มีข้อมูลนักศึกษาใน class section อื่น หรือ อยู่ใน class นี้แล้ว 
 				</center>				
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -444,9 +444,9 @@
 					</div>
 
 					<div style="background-color:#f1f2f6;min-width: 85%;min-height: 500px;padding: 50px;">
-						<div class="table-responsive">
-						<table class="table table-hover">
-							<thead class="text-primary thead-light" style="font-size: 20px;">
+						<div class="table-responsive-sm" >
+						<table class="table table-dark table-hover" style="border-radius: 20px; box-shadow: 0px 0px 50px 25px #1e272e;">
+							<thead class="text-white bg-info" style="font-size: 20px;">
 								<tr>
 									<th>รหัสนักศึกษา</th>
 									<th>ชื่อ-นามสกุล</th>
@@ -471,7 +471,8 @@
 											<td class="text-danger">ลาออก</td>
 										<?php } ?>								
 										<td> 
-											<button class="btn btn-warning" data-toggle="modal" data-target="#edit_student<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข</button> &nbsp;||&nbsp;
+											<button class="btn btn-warning" data-toggle="modal" data-target="#edit_student<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข section</button> &nbsp;||&nbsp;
+											<button class="btn btn-warning" data-toggle="modal" data-target="#edit_student_sec<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> &nbsp;||&nbsp;
 											<button class="btn btn-danger" data-toggle="modal" data-target="#delete_student<?=$row7['enroll_id']?>"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;ลบ</button>
 										</td>
 									</tr>
@@ -534,6 +535,70 @@
 										</div>
 									</form>
 
+									<!-- Modal Edit Student Section  -->
+									<form action="edit_student_sec_form.php" name="edit_student_sec_form<?=$row7['enroll_id']?>" method="post">
+										<div class="modal fade" id="edit_student_sec<?=$row7['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+										  <div class="modal-dialog modal-dialog-centered" role="document">
+										    <div class="modal-content">
+										      <div class="modal-header">
+										        <h5 class="modal-title" id="exampleModalLongTitle">Edit Student Section</h5>
+										        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										          <span aria-hidden="true">&times;</span>
+										        </button>
+										      </div>
+										      <div class="modal-body">
+										      	<input type="hidden" name="enroll_id" value="<?=$row7['enroll_id']?>">
+										      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+				      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+				      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+				      							<input type="hidden" name="c_year" value="<?=$rowCYEAR['c_year']?>">
+				      							<input type="hidden" name="c_term" value="<?=$rowCTERM['c_term']?>">
+										       <div class="form-group">
+										       		<label class="text-primary" style="font-size: 20px;"> รหัสนักศึกษา </label>
+										       		<input type="text" name="s_id" value="<?=$row7['s_id']?>" class="form-control" readonly="">
+										       </div>
+										       <div class="form-group">
+										       		<label class="text-primary" style="font-size: 20px;"> ชื่อ-นามสกุล </label>
+										       		<input type="text" name="s_name" value="<?=$row7['s_name']?>" class="form-control" readonly="">
+										       </div>
+										       <div class="form-group">
+										       		<label class="text-primary" style="font-size: 20px;"> สาขาวิชา </label>
+										       		<input type="text" name="s_department" value="<?=$row7['s_department']?>" class="form-control" readonly="">
+										       </div>
+										       <div class="form-group">
+										       		<label class="text-primary" style="font-size: 20px;"> สถานะ </label>
+										       		<?php if ($row7['status'] == 1) { ?>
+														<select name="status" class="form-control">
+															<option value="1" selected=""> ลงทะเบียน </option>
+															<option value="2"> ถอนรายวิชา </option>
+															<option value="3"> ลาออก </option>
+														</select>
+													<?php } elseif ($row7['status'] == 2) { ?>
+														<select name="status" class="form-control">
+															<option value="2" selected=""> ถอนรายวิชา </option>
+															<option value="1"> ลงทะเบียน </option>
+															<option value="3"> ลาออก </option>
+														</select>
+													<?php } elseif ($row7['status'] == 3) { ?>
+														<select name="status" class="form-control">
+															<option value="3" selected=""> ลาออก </option>
+															<option value="1"> ลงทะเบียน </option>
+															<option value="2"> ถอนรายวิชา </option>
+														</select>
+													<?php } ?>
+										       </div>
+										      </div>
+
+										      
+										      <div class="modal-footer">
+										        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+										        <button type="submit" class="btn btn-primary" id="edit_submit_button">แก้ไข</button>
+										      </div>
+										    </div>
+										  </div>
+										</div>
+									</form>
+
 								<?php } ?>	
 
 							</tbody>
@@ -543,7 +608,7 @@
 			</div>
 
 			<!-- Modal Add Student By file -->
-		<form action="add_student_file.php" method="post" name="add_student_file" id="add_student_file" enctype="multipart/form-data">
+		<form action="add_student_file1.php" method="post" name="add_student_file" id="add_student_file" enctype="multipart/form-data">
 			<div class="modal fade" id="add_student_file_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
 				  <div class="modal-dialog" role="document" >
 				    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;width: 600px;">

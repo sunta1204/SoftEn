@@ -24,7 +24,7 @@
 	$stmt2->bindParam(1,$rowUser['l_username']);
 	$stmt2->execute();
 
-	$stmt5=$pdo->prepare("SELECT * FROM classroom  WHERE t_username = ? ");
+	$stmt5=$pdo->prepare("SELECT * FROM classroom  WHERE t_username = ? ORDER BY c_id , c_sec ASC");
 	$stmt5->bindParam(1,$rowUser1['t_username']);
 	$stmt5->execute();
 

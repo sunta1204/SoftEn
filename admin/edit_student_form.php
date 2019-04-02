@@ -15,7 +15,7 @@
 		$s_name['s_name'] = $row['s_name'];
 		$s_department['s_department'] = $row['s_department'];
 		$status['status'] = $row['status'];
-		$class_sec['c_sec'] = $row['c_sec']; 
+		$class_sec['c_sec'] = $row['c_sec'];
 	}
 
 	$stmt2=$pdo->prepare("SELECT * FROM classroom WHERE c_id = ? AND c_year = ? AND c_term = ?");
@@ -23,6 +23,9 @@
 	$stmt2->bindParam(2,$_POST['c_year']);
 	$stmt2->bindParam(3,$_POST['c_term']);
 	$stmt2->execute();
+
+	$c_term = $_POST['c_term'];
+	$c_year = $_POST['c_year'];
 
 	$stmt3 = $pdo->prepare("SELECT * FROM ta WHERE t_username = ?");
 	$stmt3->bindParam(1,$_SESSION["username"]);
@@ -142,11 +145,13 @@
 		</form>
 	<?php } ?>
 
-	<div class="container" style="padding-left: 50px;padding-right: 50px;padding-top: 50px; padding-bottom: 195px;background-color: #ecf0f1;">
+	<div class="container" style="padding-left: 50px;padding-right: 50px;padding-top: 50px; padding-bottom: 285px;background-color: #ecf0f1;">
 		<form action="edit_student.php" method="post">
 			<input type="hidden" name="id" value="<?=$id?>">
 			<input type="hidden" name="c_id" value="<?=$c_id?>">
 			<input type="hidden" name="c_sec" value="<?=$c_sec?>">
+			<input type="hidden" name="c_year" value="<?=$c_year?>">
+			<input type="hidden" name="c_term" value="<?=$c_term?>">
 			<input type="hidden" name="s_id" value="<?=$s_id['s_id']?>">
 			<input type="hidden" name="s_name" value="<?=$s_name['s_name']?>">
 			<input type="hidden" name="s_department" value="<?=$s_department['s_department']?>">
@@ -165,38 +170,17 @@
 				<input class="form-control" readonly="" type="text" name="s_department" id="s_department" value="<?=$s_department['s_department']?>">
 			</div>
 			<div class="form-group">
-				<label class="text-primary" style="font-size: 20px;"> สถานะ </label>
-				<?php if ($status['status'] == 1) { ?>
-					<select name="status" class="form-control">
-						<option value="1" selected=""> ลงทะเบียน </option>
-						<option value="2"> ถอนรายวิชา </option>
-						<option value="3"> ลาออก </option>
-					</select>
-				<?php } elseif ($status['status'] == 2) { ?>
-					<select name="status" class="form-control">
-						<option value="2" selected=""> ถอนรายวิชา </option>
-						<option value="1"> ลงทะเบียน </option>
-						<option value="3"> ลาออก </option>
-					</select>
-				<?php } elseif ($status['status'] == 3) { ?>
-					<select name="status" class="form-control">
-						<option value="3" selected=""> ลาออก </option>
-						<option value="1"> ลงทะเบียน </option>
-						<option value="2"> ถอนรายวิชา </option>
-					</select>
-				<?php } ?>
-			</div>
-			<div class="form-group">
-				<label class="text-primary" style="font-size: 20px;"> รหัสนักศึกษา </label>
+				<label class="text-primary" style="font-size: 20px;"> Section </label>
 				<select name="class_section" id="class_section" class="form-control">
 					<option value="<?=$class_sec['c_sec']?>"> <?=$class_sec['c_sec']?> </option>
 					<?php while ($row2 = $stmt2->fetch()) { ?>
 						<option value="<?=$row2['c_sec']?>"> <?=$row2['c_sec']?> </option>
 					<?php } ?>
 				</select>
-			</div>
-			<div class="form-group">
-				<button type="submit" name="submit_edit_button" id="submit_edit_button" class="btn btn-primary col-12"> แก้ไข </button>
+			</div><br><br>
+			<div class="form-inline">
+				<a href="detail_class.php?id=<?=$id?>&c_id=<?=$c_id?>&c_sec=<?=$c_sec?>" class="btn btn-danger col-3 mr-sm-2 mb-4" id="back_to_detail"  > ย้อนกลับ </a>
+				<button type="submit" name="submit_edit_button" id="submit_edit_button" class="btn btn-primary col-3 mr-sm-2 mb-4"> แก้ไข </button>
 			</div>
 		</form>
 	</div>
