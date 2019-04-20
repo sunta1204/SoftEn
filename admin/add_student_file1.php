@@ -2,7 +2,7 @@
 
     include "../connect.php";
     include ("ExcelRead.php");
-    include ("deleteFile.php");
+    
 
             $target_dir = "student_file/";
             $target_file = $target_dir . basename($_FILES["student_file"]["name"]);
@@ -34,9 +34,9 @@
                 echo "Sorry, your file was not uploaded.";
             // if everything is ok, try to upload file
             } else {
-                if (move_uploaded_file($_FILES["student_file"]["tmp_name"], "student_file/".$file_name)) {
-                    $data_array=ReadExcel("student_file/".$file_name);
-                    deleteFile("student_file/".$file_name);
+                if (isset($_FILES['student_file'])) {
+                    $data_array=ReadExcel($_FILES['student_file']['tmp_name']);
+                    
 
 
                             $i=0; 

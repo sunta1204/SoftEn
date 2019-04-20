@@ -58,6 +58,7 @@
 								setcookie('add_student_same',1,time()+5,'/');
 								echo "<script type='text/javascript'>window.location.href='detail_class.php?id=$id&c_id=$c_id&c_sec=$c_sec';</script>";
 							}else {
+
 								$stmt3=$pdo->prepare("INSERT INTO enroll (c_id,c_name,c_year,c_term,c_sec,l_name,l_username,s_id,s_name,s_department) VALUES (?,?,?,?,?,?,?,?,?,?)");
 											 $stmt3->bindParam(1,$_POST['c_id']);
 											 $stmt3->bindParam(2,$rowCName['c_name']);

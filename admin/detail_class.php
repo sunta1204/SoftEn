@@ -371,6 +371,29 @@
 	<?php } ?>
 
 	<?php 
+		if (!empty($_COOKIE["edit_studen_sec_status_error"])){ ?>
+			<script type="text/javascript">
+    			$(window).on('load',function(){
+        			$('#edit_student_error').alert('fade');
+        				setTimeout(function(){
+        					$('#edit_student_error').alert('close');
+        				}, 3000);
+    				});
+    				$('#edit_student_error').click(function(){
+    					$('edit_student_error').alert('close');
+    				});
+			</script>
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="edit_student_error">
+				<center>
+					<strong>Edit Student Status Failed!</strong> ไม่สามารถย้าย section ได้ เนื่องจาก นักศึกษาอยู่ในสถานะ ถอนรายวิชา หรือ ลาออก
+				</center>				
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+	<?php } ?>
+
+	<?php 
 		if (!empty($_COOKIE["delete_student_success"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
@@ -432,14 +455,14 @@
 					
 					<div style="background-color: #ced6e0; min-height: 700px;width: 300px; padding-top: 50px;padding-bottom: 50px;">
 						<div class="form-group mb-3 justify-content-center" style="text-align: center; ">
-							<button id="add_student_button" data-target="#addStd" data-toggle="modal" class="btn btn-primary btn-lg col-10" style="background-color: #4682B4;"> เพิ่มนักศึกษา </button>
+							<button id="add_student_button" data-target="#addStd" data-toggle="modal" class="btn btn-primary btn-lg col-12" style="background-color: #4682B4;"> เพิ่มนักศึกษา </button>
 						</div>
 						<div class="form-group mb-3 justify-content-center" style="text-align: center; ">
-							<button id="add_student_file_button" data-target="#add_student_file_modal" data-toggle="modal" class="btn btn-primary btn-lg col-10" style="background-color: #4682B4;"> อัพโหลดข้อมูลนักศึกษา </button>
+							<button id="add_student_file_button" data-target="#add_student_file_modal" data-toggle="modal" class="btn btn-primary btn-lg col-12" style="background-color: #4682B4;"> อัพโหลดข้อมูลนักศึกษา </button>
 						</div>		
 						
 						<div class="form-group mb-3 justify-content-center" style="text-align: center;">
-							<a href="admin_home.php" class="btn btn-danger btn-lg col-10"> ย้อนกลับ </a>
+							<a href="admin_home.php" class="btn btn-danger btn-lg col-12"> ย้อนกลับ </a>
 						</div>				
 					</div>
 
@@ -472,14 +495,13 @@
 										<?php } ?>								
 										<td> 
 											<button class="btn btn-warning" data-toggle="modal" data-target="#edit_student<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข section</button> &nbsp;||&nbsp;
-											<button class="btn btn-warning" data-toggle="modal" data-target="#edit_student_sec<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> &nbsp;||&nbsp;
-											<button class="btn btn-danger" data-toggle="modal" data-target="#delete_student<?=$row7['enroll_id']?>"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;ลบ</button>
+											<button class="btn btn-warning" data-toggle="modal" data-target="#edit_student_sec<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> 
 										</td>
 									</tr>
 
 									<!-- Modal Delete Student  -->
 									<form action="delete_student.php" name="edit_student_form" method="post">
-										<div class="modal fade" id="delete_student<?=$row7['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+										<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 										  <div class="modal-dialog modal-dialog-centered" role="document">
 										    <div class="modal-content">
 										      <div class="modal-header">
@@ -535,8 +557,8 @@
 										</div>
 									</form>
 
-									<!-- Modal Edit Student Section  -->
-									<form action="edit_student_sec_form.php" name="edit_student_sec_form<?=$row7['enroll_id']?>" method="post">
+									<!-- Modal Edit Student Status  -->
+									<form action="edit_student_status.php" name="edit_student_sec_form<?=$row7['enroll_id']?>" method="post">
 										<div class="modal fade" id="edit_student_sec<?=$row7['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 										  <div class="modal-dialog modal-dialog-centered" role="document">
 										    <div class="modal-content">

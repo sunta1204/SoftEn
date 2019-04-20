@@ -16,6 +16,7 @@
 		$s_department['s_department'] = $row['s_department'];
 		$status['status'] = $row['status'];
 		$class_sec['c_sec'] = $row['c_sec'];
+
 	}
 
 	$stmt2=$pdo->prepare("SELECT * FROM classroom WHERE c_id = ? AND c_year = ? AND c_term = ?");
@@ -154,6 +155,7 @@
 			<input type="hidden" name="c_term" value="<?=$c_term?>">
 			<input type="hidden" name="s_id" value="<?=$s_id['s_id']?>">
 			<input type="hidden" name="s_name" value="<?=$s_name['s_name']?>">
+			<input type="hidden" name="status" value="<?=$status['status']?>">
 			<input type="hidden" name="s_department" value="<?=$s_department['s_department']?>">
 			<input type="hidden" name="enroll_id" value="<?=$enroll_id['enroll_id']?>">
 			<label class="text-primary" style="font-size: 36px;"> แก้ไขข้อมูลนักศึกษา </label>

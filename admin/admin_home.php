@@ -20,17 +20,6 @@
 	 	$rowName1["t_name"] = $row4["t_name"];
 	 } 
 
-	$stmt2=$pdo->prepare("SELECT * FROM classroom  WHERE l_username = ? ");
-	$stmt2->bindParam(1,$rowUser['l_username']);
-	$stmt2->execute();
-
-	$stmt5=$pdo->prepare("SELECT * FROM classroom  WHERE t_username = ? ORDER BY c_id , c_sec ASC");
-	$stmt5->bindParam(1,$rowUser1['t_username']);
-	$stmt5->execute();
-
-	$stmt6=$pdo->prepare("SELECT * FROM teacher");
-	$stmt6->execute();
-
 	$stmt3=$pdo->prepare("SELECT * FROM teacher WHERE permission = 1");
 	$stmt3->execute();
 
@@ -81,6 +70,22 @@
 		    <ul class="navbar-nav mr-auto">
 		    	
 		    </ul>
+		    <form name="search_form" method="post" action="<?=$_SERVER['SCRIPT_NAME']?>">
+		    	<div class="form-inline mr-sm-2">
+			    	<select class="form-control mr-sm-2" name="search_type1" id="search_type1">
+			    		<option selected="">เลือกประเภทการค้นหา</option>
+			    		<option value="c_id">รหัสวิชา</option>
+			    		<option value="c_name">ชื่อวิชา</option>
+			    		<option value="c_password">รหัสเข้าคลาส</option>
+			    		<option value="c_year">ปีการศึกษา</option>
+			    		<option value="c_term">เทอม</option>
+			    		<option value="c_sec">section</option>
+			    	</select>
+			    	<input type="text" name="keyword1" id="keyword1" class="form-control mr-sm-2">
+			    	<button class="btn btn-success" type="submit" id="submit_button_search1" value="search"><i class="fas fa-search"></i> ค้นหา </button>
+			    </div>
+		    </form>
+		    
 		    <div class="form-inline my-2 my-lg-0 mr-sm-2  col-3">
 		    	<a href="" class="btn btn-primary  dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-user-tie"></i> <?= $rowName["l_name"] ?> </a>
 		    	<div class="dropdown-menu col-10">
@@ -168,6 +173,23 @@
 		    <ul class="navbar-nav mr-auto">
 		    	
 		    </ul>
+		    <form action="<?=$_SERVER['SCRIPT_NAME']?>" name="search_form2" method="post">
+		    	 <div class="form-inline mr-sm-2">
+			    	<select class="form-control mr-sm-2" name="search_type2" id="search_type2">
+			    		<option selected=""> เลือกประเภทการค้นหา </option>
+			    		<option value="c_id">รหัสวิชา</option>
+			    		<option value="c_name">ชื่อวิชา</option>
+			    		<option value="c_password">รหัสเข้าคลาส</option>
+			    		<option value="c_year">ปีการศึกษา</option>
+			    		<option value="c_term">เทอม</option>
+			    		<option value="c_sec">section</option>
+			    		<option value="l_name">อาจารย์ประจำวิชา</option>
+			    	</select>
+			    	<input type="text" name="keyword2" id="keyword2" class="form-control mr-sm-2">
+			    	<button class="btn btn-success" type="submit" id="submit_button_search" value="search"><i class="fas fa-search"></i> ค้นหา </button>
+			    </div>
+		    </form>
+		   
 		    <div class="form-inline my-2 my-lg-0 mr-sm-2  col-3">
 		    	<a href="" class="btn btn-primary  dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-user-tie"></i> <?= $rowName1["t_name"] ?> </a>
 		    	<div class="dropdown-menu col-10">
@@ -485,270 +507,518 @@
 		<div class="form-inline d-flex " style="margin-left: 20px;">
 
 			<?php if ($_SESSION['permission'] == 1) { ?>
-				<?php while ($row2=$stmt2->fetch()) {?>
-				<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
-				<div class="card  bg-info zoomclass mb-4">
-					<a id="detail_class.php?id=<?=$row2['id']?>" href="detail_class.php?id=<?=$row2['id']?>&c_id=<?=$row2['c_id']?>&c_sec=<?=$row2['c_sec']?>">
-						<div class="card-header" style=" margin-top: 5px;">
-							<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row2['c_id']?> </p>
-						</div>
-						<div class="card-body" style="margin-top: 5px;">
-							<div class="from-group mr-sm-2">
-								<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row2['c_name']?> </p>
-							</div>
-							<div class="from-group mr-sm-2">
-								<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row2['c_sec']?> </p>
-							</div>		
-							<div class="from-group mr-sm-2">
-							<?php if ($row2['c_term'] == 1) { ?>
-								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
-							<?php } elseif ($row2['c_term'] == 2) { ?>
-								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
-							<?php } elseif ($row2['c_term'] == 3) { ?>
-								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
-							<?php } ?>								
-							</div>
-							<div class="from-group mr-sm-2">	
-								<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row2['c_year']?> </p>
-							</div>
-							<div class="from-group mr-sm-2">
-								<p class="card-text text-white" style="font-size: 20px;"> รหัส Join : <?=$row2['c_password']?> </p>	
-							</div>									 
-						</div>
-					</a>
-						<div class="card-footer" style="margin-top: 5px;">
-							<div class="form-inline" style="text-align: left;">
-								<button id="edit_class_button<?=$row2['id']?>" data-target="#edit_class?id=<?=$row2['id']?>" data-toggle="modal" class="btn btn-warning mr-sm-2"><i class="fas fa-edit"></i>&nbsp; แก้ไข </button>
-								<button id="delete_class_button<?=$row2['id']?>" data-target="#delete_class?id=<?=$row2['id']?>" data-toggle="modal" class="btn btn-danger mr-sm-2"><i class="fas fa-trash"></i>&nbsp; ลบ </button>
-							</div>
-						</div>
+				<?php if (!isset($_POST['search_type1']) && !isset($_POST['keyword1'])) {
+						 	$stmt2=$pdo->prepare("SELECT * FROM classroom  WHERE l_username = ? ORDER BY c_id , c_sec ASC ");
+							$stmt2->bindParam(1,$rowUser['l_username']);
+							$stmt2->execute();
+							while ($row2=$stmt2->fetch()) { ?>
+								<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
+									<div class="card  bg-info zoomclass mb-4">
+										<a id="detail_class.php?id=<?=$row2['id']?>" href="detail_class.php?id=<?=$row2['id']?>&c_id=<?=$row2['c_id']?>&c_sec=<?=$row2['c_sec']?>">
+											<div class="card-header" style=" margin-top: 5px;">
+												<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row2['c_id']?> </p>
+											</div>
+											<div class="card-body" style="margin-top: 5px;">
+												<div class="from-group mr-sm-2">
+													<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row2['c_name']?> </p>
+												</div>
+												<div class="from-group mr-sm-2">
+													<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row2['c_sec']?> </p>
+												</div>		
+												<div class="from-group mr-sm-2">
+												<?php if ($row2['c_term'] == 1) { ?>
+													<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
+												<?php } elseif ($row2['c_term'] == 2) { ?>
+													<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
+												<?php } elseif ($row2['c_term'] == 3) { ?>
+													<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
+												<?php } ?>								
+												</div>
+												<div class="from-group mr-sm-2">	
+													<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row2['c_year']?> </p>
+												</div>
+												<div class="from-group mr-sm-2">
+													<p class="card-text text-white" style="font-size: 20px;"> รหัส Join : <?=$row2['c_password']?> </p>	
+												</div>									 
+											</div>
+										</a>
+											<div class="card-footer" style="margin-top: 5px;">
+												<div class="form-inline" style="text-align: left;">
+													<button id="edit_class_button<?=$row2['id']?>" data-target="#edit_class?id=<?=$row2['id']?>" data-toggle="modal" class="btn btn-warning mr-sm-2"><i class="fas fa-edit"></i>&nbsp; แก้ไข </button>
+													<button id="delete_class_button<?=$row2['id']?>" data-target="#delete_class?id=<?=$row2['id']?>" data-toggle="modal" class="btn btn-danger mr-sm-2"><i class="fas fa-trash"></i>&nbsp; ลบ </button>
+												</div>
+											</div>
+										
+									</div>
+								</div>	
+
+								<!-- Modal Edit Class -->
+								<form action="edit_class.php" method="post" >
+								<div class="modal fade" id="edit_class?id=<?=$row2['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									  <div class="modal-dialog modal-dialog-centered" role="document">
+									    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
+									      <div class="modal-header">
+									        <h3 class="modal-title" id="exampleModalLabel">Edit Class</h3>
+									        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+									      </div>
+									      <div class="modal-body">
+									      	<input type="hidden" name="id" class="form-control col-12"  value="<?=$row2['id']?>">
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> รหัสวิชา : </label>
+										     	<input type="text" name="class_id" id="class_id<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_id']?>">
+										     </div>
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> ชื่อคลาส : </label>
+										     	<input type="text" name="class_name" id="class_name<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_name']?>"> 
+										     </div>  
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> ปีการศึกษา : </label>
+										     	<input type="text" name="class_year" id="class_year<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_year']?>">
+										     </div>  
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> ภาคการเรียน : </label>
+										     	<input type="text" name="class_term" id="class_term<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_term']?>">
+										     </div>  
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> รหัส Join คลาส : </label>
+										     	<input type="text" name="class_password" id="class_password<?=$row2['id']?>"  class="form-control col-12" value="<?=$row2['c_password']?>">
+										     </div>
+										   </div>    	    
+									      <div class="modal-footer">
+									        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									        <button type="submit" class="btn btn-primary" id="edit_class_submit<?=$row2['id']?>" name="edit_class_submit<?=$row2['id']?>"> แก้ไขคลาส </button>
+									      </div>
+									    </div>
+									  </div>
+									</div>
+								</form>
+
+								<!-- Modal delete Class -->
+								<form action="delete_class.php" method="post">
+								<div class="modal fade" id="delete_class?id=<?=$row2['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									  <div class="modal-dialog modal-dialog-centered" role="document">
+									    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
+									      <div class="modal-header">
+									        <h3 class="modal-title" id="exampleModalLabel">Delete Class</h3>
+									        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+									      </div>
+									      <div class="modal-body">
+									      	<input type="hidden" name="id" class="form-control col-12" required="" value="<?=$row2['id']?>">
+										     <label class="text-dark" style="font-size: 20px;">คุณแน่ใจหรือไม่ ที่จะลบ : </label><br>
+										     <label class="text-danger" style="font-size: 20px;"><?=$row2['c_id']?>&nbsp;<?=$row2['c_name']?> </label>
+										   </div>    	    
+									      <div class="modal-footer">
+									        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									        <button type="submit" class="btn btn-danger" id="delete_class_submit<?=$row2['id']?>"> ลบคลาส </button>
+									      </div>
+									    </div>
+									  </div>
+									</div>
+								</form>	
+							<?php }
+
+						  } elseif (isset($_POST['search_type1']) && isset($_POST['keyword1'])) {
+						  	$conn = new PDO("mysql:host=localhost;dbname=19S1_g5;
+		     			 	charset=utf8","root","");
+						    $strSQL = "SELECT * FROM classroom WHERE l_username = '".$rowUser['l_username']."' ";
+						    if($_POST["search_type1"] != "" and  $_POST["keyword1"]  != '')
+						    {
+						      $strSQL .= " AND (".$_POST["search_type1"]." LIKE '%".$_POST["keyword1"]."%') ORDER BY c_id , c_sec ASC ";
+						    } 
+
+						    $stmt7 = $conn->prepare($strSQL);
+						    $stmt7->execute();
+						    while ($row7=$stmt7->fetch()) { ?>
+						    	<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
+									<div class="card  bg-info zoomclass mb-4">
+										<a id="detail_class.php?id=<?=$row7['id']?>" href="detail_class.php?id=<?=$row7['id']?>&c_id=<?=$row7['c_id']?>&c_sec=<?=$row7['c_sec']?>">
+											<div class="card-header" style=" margin-top: 5px;">
+												<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row7['c_id']?> </p>
+											</div>
+											<div class="card-body" style="margin-top: 5px;">
+												<div class="from-group mr-sm-2">
+													<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row7['c_name']?> </p>
+												</div>
+												<div class="from-group mr-sm-2">
+													<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row7['c_sec']?> </p>
+												</div>		
+												<div class="from-group mr-sm-2">
+												<?php if ($row7['c_term'] == 1) { ?>
+													<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
+												<?php } elseif ($row7['c_term'] == 2) { ?>
+													<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
+												<?php } elseif ($row7['c_term'] == 3) { ?>
+													<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
+												<?php } ?>								
+												</div>
+												<div class="from-group mr-sm-2">	
+													<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row7['c_year']?> </p>
+												</div>
+												<div class="from-group mr-sm-2">
+													<p class="card-text text-white" style="font-size: 20px;"> รหัส Join : <?=$row7['c_password']?> </p>	
+												</div>									 
+											</div>
+										</a>
+											<div class="card-footer" style="margin-top: 5px;">
+												<div class="form-inline" style="text-align: left;">
+													<button id="edit_class_button<?=$row7['id']?>" data-target="#edit_class?id=<?=$row7['id']?>" data-toggle="modal" class="btn btn-warning mr-sm-2"><i class="fas fa-edit"></i>&nbsp; แก้ไข </button>
+													<button id="delete_class_button<?=$row7['id']?>" data-target="#delete_class?id=<?=$row7['id']?>" data-toggle="modal" class="btn btn-danger mr-sm-2"><i class="fas fa-trash"></i>&nbsp; ลบ </button>
+												</div>
+											</div>
+										
+									</div>
+								</div>	
+
+								<!-- Modal Edit Class -->
+								<form action="edit_class.php" method="post" >
+								<div class="modal fade" id="edit_class?id=<?=$row7['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									  <div class="modal-dialog modal-dialog-centered" role="document">
+									    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
+									      <div class="modal-header">
+									        <h3 class="modal-title" id="exampleModalLabel">Edit Class</h3>
+									        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+									      </div>
+									      <div class="modal-body">
+									      	<input type="hidden" name="id" class="form-control col-12"  value="<?=$row7['id']?>">
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> รหัสวิชา : </label>
+										     	<input type="text" name="class_id" id="class_id<?=$row7['id']?>"  class="form-control col-12"  value="<?=$row7['c_id']?>">
+										     </div>
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> ชื่อคลาส : </label>
+										     	<input type="text" name="class_name" id="class_name<?=$row7['id']?>"  class="form-control col-12"  value="<?=$row7['c_name']?>"> 
+										     </div>  
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> ปีการศึกษา : </label>
+										     	<input type="text" name="class_year" id="class_year<?=$row7['id']?>"  class="form-control col-12"  value="<?=$row7['c_year']?>">
+										     </div>  
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> ภาคการเรียน : </label>
+										     	<input type="text" name="class_term" id="class_term<?=$row7['id']?>"  class="form-control col-12"  value="<?=$row7['c_term']?>">
+										     </div>  
+										     <div class="form-group mb-4">
+										     	<label class="text-primary mb-2"> รหัส Join คลาส : </label>
+										     	<input type="text" name="class_password" id="class_password<?=$row7['id']?>"  class="form-control col-12" value="<?=$row7['c_password']?>">
+										     </div>
+										   </div>    	    
+									      <div class="modal-footer">
+									        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									        <button type="submit" class="btn btn-primary" id="edit_class_submit<?=$row7['id']?>" name="edit_class_submit<?=$row7['id']?>"> แก้ไขคลาส </button>
+									      </div>
+									    </div>
+									  </div>
+									</div>
+								</form>
+
+								<!-- Modal delete Class -->
+								<form action="delete_class.php" method="post">
+								<div class="modal fade" id="delete_class?id=<?=$row7['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									  <div class="modal-dialog modal-dialog-centered" role="document">
+									    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
+									      <div class="modal-header">
+									        <h3 class="modal-title" id="exampleModalLabel">Delete Class</h3>
+									        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+									      </div>
+									      <div class="modal-body">
+									      	<input type="hidden" name="id" class="form-control col-12" required="" value="<?=$row7['id']?>">
+										     <label class="text-dark" style="font-size: 20px;">คุณแน่ใจหรือไม่ ที่จะลบ : </label><br>
+										     <label class="text-danger" style="font-size: 20px;"><?=$row7['c_id']?>&nbsp;<?=$row7['c_name']?> </label>
+										   </div>    	    
+									      <div class="modal-footer">
+									        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									        <button type="submit" class="btn btn-danger" id="delete_class_submit<?=$row7['id']?>"> ลบคลาส </button>
+									      </div>
+									    </div>
+									  </div>
+									</div>
+								</form>	
+						    <?php }
+				} ?>
 					
-				</div>
-			</div>	
 
-			<!-- Modal Edit Class -->
-			<form action="edit_class.php" method="post" >
-			<div class="modal fade" id="edit_class?id=<?=$row2['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				  <div class="modal-dialog modal-dialog-centered" role="document">
-				    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
-				      <div class="modal-header">
-				        <h3 class="modal-title" id="exampleModalLabel">Edit Class</h3>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				          <span aria-hidden="true">&times;</span>
-				        </button>
-				      </div>
-				      <div class="modal-body">
-				      	<input type="hidden" name="id" class="form-control col-12"  value="<?=$row2['id']?>">
-					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> รหัสวิชา : </label>
-					     	<input type="text" name="class_id" id="class_id<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_id']?>">
-					     </div>
-					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> ชื่อคลาส : </label>
-					     	<input type="text" name="class_name" id="class_name<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_name']?>"> 
-					     </div>  
-					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> ปีการศึกษา : </label>
-					     	<input type="text" name="class_year" id="class_year<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_year']?>">
-					     </div>  
-					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> ภาคการเรียน : </label>
-					     	<input type="text" name="class_term" id="class_term<?=$row2['id']?>"  class="form-control col-12"  value="<?=$row2['c_term']?>">
-					     </div>  
-					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> รหัส Join คลาส : </label>
-					     	<input type="text" name="class_password" id="class_password<?=$row2['id']?>"  class="form-control col-12" value="<?=$row2['c_password']?>">
-					     </div>
-					   </div>    	    
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				        <button type="submit" class="btn btn-primary" id="edit_class_submit<?=$row2['id']?>" name="edit_class_submit<?=$row2['id']?>"> แก้ไขคลาส </button>
-				      </div>
-				    </div>
-				  </div>
-				</div>
-			</form>
+		<?php } elseif ($_SESSION['permission'] == 2) { 
+					if (!isset($_POST['search_type2']) && !isset($_POST['keyword2'])) {
+						$stmt5=$pdo->prepare("SELECT * FROM classroom  WHERE t_username = ? ORDER BY c_id , c_sec ASC");
+						$stmt5->bindParam(1,$rowUser1['t_username']);
+						$stmt5->execute();
+						while ($row5=$stmt5->fetch()) { ?>
+							<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
+								<div class="card  bg-info zoomclass mb-4">
+									<a id="detail_class.php?id=<?=$row5['id']?>" href="detail_class.php?id=<?=$row5['id']?>&c_id=<?=$row5['c_id']?>&c_sec=<?=$row5['c_sec']?>">
+										<div class="card-header" style=" margin-top: 5px;">
+											<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row5['c_id']?> </p>
+										</div>
+										<div class="card-body" style="margin-top: 5px;">
+											<div class="from-group mr-sm-2">
+												<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row5['c_name']?> </p>
+											</div>
+											<div class="from-group mr-sm-2">
+												<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row5['c_sec']?> </p>
+											</div>		
+											<div class="from-group mr-sm-2">
+											<?php if ($row5['c_term'] == 1) { ?>
+												<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
+											<?php } elseif ($row5['c_term'] == 2) { ?>
+												<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
+											<?php } elseif ($row5['c_term'] == 3) { ?>
+												<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
+											<?php } ?>								
+											</div>
+											<div class="from-group mr-sm-2">	
+												<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row5['c_year']?> </p>
+											</div>
+											<div class="from-group mr-sm-2">	
+												<p class="card-text text-white" style="font-size: 20px;"> อาจารย์ประจำวิชา : <?=$row5['l_name']?> </p>
+											</div>
+											<div class="from-group mr-sm-2">
+												<p class="card-text text-white" style="font-size: 20px;"> รหัส Join : <?=$row5['c_password']?> </p>	
+											</div>									 
+										</div>
+									</a>
+										<div class="card-footer" style="margin-top: 5px;">
+											<div class="form-inline" style="text-align: left;">
+												<button id="edit_class_button<?=$row5['id']?>" data-target="#edit_class?id=<?=$row5['id']?>" data-toggle="modal" class="btn btn-warning mr-sm-2"><i class="fas fa-edit"></i>&nbsp; แก้ไข </button>
+											</div>
+										</div>
+									
+								</div>
+							</div>	
 
-			<!-- Modal delete Class -->
-			<form action="delete_class.php" method="post">
-			<div class="modal fade" id="delete_class?id=<?=$row2['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				  <div class="modal-dialog modal-dialog-centered" role="document">
-				    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
-				      <div class="modal-header">
-				        <h3 class="modal-title" id="exampleModalLabel">Delete Class</h3>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				          <span aria-hidden="true">&times;</span>
-				        </button>
-				      </div>
-				      <div class="modal-body">
-				      	<input type="hidden" name="id" class="form-control col-12" required="" value="<?=$row2['id']?>">
-					     <label class="text-dark" style="font-size: 20px;">คุณแน่ใจหรือไม่ ที่จะลบ : </label><br>
-					     <label class="text-danger" style="font-size: 20px;"><?=$row2['c_id']?>&nbsp;<?=$row2['c_name']?> </label>
-					   </div>    	    
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				        <button type="submit" class="btn btn-danger" id="delete_class_submit<?=$row2['id']?>"> ลบคลาส </button>
-				      </div>
-				    </div>
-				  </div>
-				</div>
-			</form>
+							<!-- Modal Edit Class -->
+							<form action="edit_class.php" method="post" >
+							<div class="modal fade" id="edit_class?id=<?=$row5['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								  <div class="modal-dialog modal-dialog-centered" role="document">
+								    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
+								      <div class="modal-header">
+								        <h3 class="modal-title" id="exampleModalLabel">Edit Class</h3>
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+								      </div>
+								      <div class="modal-body">
+								      	<input type="hidden" name="id" class="form-control col-12"  value="<?=$row5['id']?>">
+									     <div class="form-group mb-4">
+									     	<label class="text-primary"> รหัสวิชา : </label>
+									     	<input type="text" name="class_id" class="form-control" id="class_id<?=$row5['id']?>" value="<?=$row5['c_id']?>">
+									     </div>
+									     <div class="form-group mb-4">
+									     	<label class="text-primary"> ชื่อรายวิชา : </label>
+									     	<input type="text" name="class_name" class="form-control" id="class_name<?=$row5['id']?>" value="<?=$row5['c_name']?>">
+									     </div> 
+									     <?php date_default_timezone_set('Asia/Bangkok');
+												$date = date('Y'); 
+												$dateThai = $date + 542;
+										?> 
+									     <div class="form-group mb-4">
+									     	<label class="text-primary"> ปีการศึกษา : </label>
+									     	<select class="form-control" name="class_year" id="class_year<?=$row5['id']?>">
+									     		<option selected="" value="<?=$row5['c_year']?>"> <?=$row5['c_year']?> </option>
+									     		<?php for ($i=$dateThai; $i <= 3000 ; $i++) { ?>
+									     			<option value="<?=$i?>"> <?=$i?> </option>
+									     		<?php } ?>
+									     	</select>
+									     </div>  
+									     <div class="form-group mb-4">
+									     	<label class="text-primary"> ภาคการศึกษา : </label>
+									     	<select class="form-control" name="class_term" id="class_term<?=$row5['id']?>">
+									     		<option selected="" value="<?=$row5['c_term']?>"> <?php if ($row5['c_term'] == 1) { ?>
+									     			เทอมต้น
+									     		<?php } elseif ($row5['c_term'] == 2) { ?>
+									     			เทอมปลาย
+									     		<?php } elseif ($row5['c_term'] == 3) { ?>
+									     			ภาคฤดูร้อน
+									     		<?php } ?> </option>
+									     		<option value="1"> เทอมต้น </option>
+									     		<option value="2"> เทอมปลาย </option>
+									     		<option value="3"> ภาคฤดูร้อน </option>
+									     	</select>
+									     </div>
+									      <div class="form-group mb-4">
+									     	<label class="text-primary"> Section : </label>
+									     	<select class="form-control" name="class_sec" id="class_sec<?=$row5['id']?>">
+									     		<option selected="" value="<?=$row5['c_sec']?>"> <?=$row5['c_sec']?> </option>
+									     		<?php for ($sec=1; $sec <=200 ; $sec++) { ?>
+									     			<option value="<?=$sec?>"> <?=$sec?> </option>
+									     		<?php } ?>
+									     	</select>
+									     </div>
+									     <?php if ($_SESSION['permission'] == 2) { ?>
+									     	<div class="form-group mb-4">
+										     	<label class="text-primary"> อาจารย์ผู้สอน : </label>
+										     	<select class="form-control" name="l_username" id="l_username<?=$row5['id']?>">
+										     		<option selected="" value="<?=$row5['l_username']?>"> <?=$row5['l_name']?> </option>
+										     		<?php
+										     			$stmt6=$pdo->prepare("SELECT * FROM teacher");
+														$stmt6->execute(); 
+										     			while ($row6=$stmt6->fetch()) { ?>
+										     			<option value="<?=$row6['l_username']?>"> <?=$row6['l_name']?> </option>
+										     		<?php } ?>
+										     	</select>
+									     	</div>  
+									     <?php } ?> 	       
+									     <div class="form-group mb-4">
+									     	<label class="text-primary mb-2"> รหัส Join คลาส : </label>
+									     	<input type="text" name="class_password" id="class_password"  class="form-control col-12" value="<?=$row5['c_password']?>">
+									     </div>
+									   </div>    	    
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								        <button type="submit" class="btn btn-primary" id="edit_class_submit<?=$row5['id']?>" name="edit_class_submit"> แก้ไขคลาส </button>
+								      </div>
+								    </div>
+								  </div>
+								</div>
+							</form>
+						<?php }
+					} elseif (isset($_POST['search_type2']) && isset($_POST['keyword2'])) {
+						$conn2 = new PDO("mysql:host=localhost;dbname=19S1_g5;
+     			 		charset=utf8","root","");
+						$strSQL2 = "SELECT * FROM classroom WHERE t_username = '".$rowUser1['t_username']."' ";
+					    if($_POST["search_type2"] != "" and  $_POST["keyword2"]  != '') {
+					      $strSQL2 .= " AND (".$_POST["search_type2"]." LIKE '%".$_POST["keyword2"]."%' ) ";
+					    } 
 
-			<?php } ?>	
+					    $stmt8 = $conn2->prepare($strSQL2);
+					    $stmt8->execute();
 
-		<?php } elseif ($_SESSION['permission'] == 2) { ?>
-				<?php while ($row5=$stmt5->fetch()) {?>
-				<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
-				<div class="card  bg-info zoomclass mb-4">
-					<a id="detail_class.php?id=<?=$row2['id']?>" href="detail_class.php?id=<?=$row5['id']?>&c_id=<?=$row5['c_id']?>&c_sec=<?=$row5['c_sec']?>">
-						<div class="card-header" style=" margin-top: 5px;">
-							<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row5['c_id']?> </p>
-						</div>
-						<div class="card-body" style="margin-top: 5px;">
-							<div class="from-group mr-sm-2">
-								<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row5['c_name']?> </p>
-							</div>
-							<div class="from-group mr-sm-2">
-								<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row5['c_sec']?> </p>
-							</div>		
-							<div class="from-group mr-sm-2">
-							<?php if ($row5['c_term'] == 1) { ?>
-								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
-							<?php } elseif ($row5['c_term'] == 2) { ?>
-								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
-							<?php } elseif ($row5['c_term'] == 3) { ?>
-								<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
-							<?php } ?>								
-							</div>
-							<div class="from-group mr-sm-2">	
-								<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row5['c_year']?> </p>
-							</div>
-							<div class="from-group mr-sm-2">	
-								<p class="card-text text-white" style="font-size: 20px;"> อาจารย์ประจำวิชา : <?=$row5['l_name']?> </p>
-							</div>
-							<div class="from-group mr-sm-2">
-								<p class="card-text text-white" style="font-size: 20px;"> รหัส Join : <?=$row5['c_password']?> </p>	
-							</div>									 
-						</div>
-					</a>
-						<div class="card-footer" style="margin-top: 5px;">
-							<div class="form-inline" style="text-align: left;">
-								<button id="edit_class_button<?=$row5['id']?>" data-target="#edit_class?id=<?=$row5['id']?>" data-toggle="modal" class="btn btn-warning mr-sm-2"><i class="fas fa-edit"></i>&nbsp; แก้ไข </button>
-								<button id="delete_class_button<?=$row5['id']?>" data-target="#delete_class?id=<?=$row5['id']?>" data-toggle="modal" class="btn btn-danger mr-sm-2"><i class="fas fa-trash"></i>&nbsp; ลบ </button>
-							</div>
-						</div>
-					
-				</div>
-			</div>	
+					    while ($row8=$stmt8->fetch()) { ?>
+					    	<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
+								<div class="card  bg-info zoomclass mb-4">
+									<a id="detail_class.php?id=<?=$row8['id']?>" href="detail_class.php?id=<?=$row8['id']?>&c_id=<?=$row8['c_id']?>&c_sec=<?=$row8['c_sec']?>">
+										<div class="card-header" style=" margin-top: 5px;">
+											<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row8['c_id']?> </p>
+										</div>
+										<div class="card-body" style="margin-top: 5px;">
+											<div class="from-group mr-sm-2">
+												<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row8['c_name']?> </p>
+											</div>
+											<div class="from-group mr-sm-2">
+												<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row8['c_sec']?> </p>
+											</div>		
+											<div class="from-group mr-sm-2">
+											<?php if ($row8['c_term'] == 1) { ?>
+												<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
+											<?php } elseif ($row8['c_term'] == 2) { ?>
+												<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
+											<?php } elseif ($row8['c_term'] == 3) { ?>
+												<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
+											<?php } ?>								
+											</div>
+											<div class="from-group mr-sm-2">	
+												<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row8['c_year']?> </p>
+											</div>
+											<div class="from-group mr-sm-2">	
+												<p class="card-text text-white" style="font-size: 20px;"> อาจารย์ประจำวิชา : <?=$row8['l_name']?> </p>
+											</div>
+											<div class="from-group mr-sm-2">
+												<p class="card-text text-white" style="font-size: 20px;"> รหัส Join : <?=$row8['c_password']?> </p>	
+											</div>									 
+										</div>
+									</a>
+										<div class="card-footer" style="margin-top: 5px;">
+											<div class="form-inline" style="text-align: left;">
+												<button id="edit_class_button<?=$row8['id']?>" data-target="#edit_class?id=<?=$row8['id']?>" data-toggle="modal" class="btn btn-warning mr-sm-2"><i class="fas fa-edit"></i>&nbsp; แก้ไข </button>
+											</div>
+										</div>
+									
+								</div>
+							</div>	
 
-			<!-- Modal Edit Class -->
-			<form action="edit_class.php" method="post" >
-			<div class="modal fade" id="edit_class?id=<?=$row5['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				  <div class="modal-dialog modal-dialog-centered" role="document">
-				    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
-				      <div class="modal-header">
-				        <h3 class="modal-title" id="exampleModalLabel">Edit Class</h3>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				          <span aria-hidden="true">&times;</span>
-				        </button>
-				      </div>
-				      <div class="modal-body">
-				      	<input type="hidden" name="id" class="form-control col-12"  value="<?=$row5['id']?>">
-					     <div class="form-group mb-4">
-					     	<label class="text-primary"> รหัสวิชา : </label>
-					     	<input type="text" name="class_id" class="form-control" id="class_id<?=$row5['id']?>" value="<?=$row5['c_id']?>">
-					     </div>
-					     <div class="form-group mb-4">
-					     	<label class="text-primary"> ชื่อรายวิชา : </label>
-					     	<input type="text" name="class_name" class="form-control" id="class_name<?=$row5['id']?>" value="<?=$row5['c_name']?>">
-					     </div> 
-					     <?php date_default_timezone_set('Asia/Bangkok');
-								$date = date('Y'); 
-								$dateThai = $date + 542;
-						?> 
-					     <div class="form-group mb-4">
-					     	<label class="text-primary"> ปีการศึกษา : </label>
-					     	<select class="form-control" name="class_year" id="class_year<?=$row5['id']?>">
-					     		<option selected="" value="<?=$row5['c_year']?>"> <?=$row5['c_year']?> </option>
-					     		<?php for ($i=$dateThai; $i <= 3000 ; $i++) { ?>
-					     			<option value="<?=$i?>"> <?=$i?> </option>
-					     		<?php } ?>
-					     	</select>
-					     </div>  
-					     <div class="form-group mb-4">
-					     	<label class="text-primary"> ภาคการศึกษา : </label>
-					     	<select class="form-control" name="class_term" id="class_term<?=$row5['id']?>">
-					     		<option selected="" value="<?=$row5['c_term']?>"> <?php if ($row5['c_term'] == 1) { ?>
-					     			เทอมต้น
-					     		<?php } elseif ($row5['c_term'] == 2) { ?>
-					     			เทอมปลาย
-					     		<?php } elseif ($row5['c_term'] == 3) { ?>
-					     			ภาคฤดูร้อน
-					     		<?php } ?> </option>
-					     		<option value="1"> เทอมต้น </option>
-					     		<option value="2"> เทอมปลาย </option>
-					     		<option value="3"> ภาคฤดูร้อน </option>
-					     	</select>
-					     </div>
-					      <div class="form-group mb-4">
-					     	<label class="text-primary"> Section : </label>
-					     	<select class="form-control" name="class_sec" id="class_sec<?=$row5['id']?>">
-					     		<option selected="" value="<?=$row5['c_sec']?>"> <?=$row5['c_sec']?> </option>
-					     		<?php for ($sec=1; $sec <=200 ; $sec++) { ?>
-					     			<option value="<?=$sec?>"> <?=$sec?> </option>
-					     		<?php } ?>
-					     	</select>
-					     </div>
-					     <?php if ($_SESSION['permission'] == 2) { ?>
-					     	<div class="form-group mb-4">
-						     	<label class="text-primary"> อาจารย์ผู้สอน : </label>
-						     	<select class="form-control" name="l_username" id="l_username<?=$row5['id']?>">
-						     		<option selected="" value="<?=$row5['l_username']?>"> <?=$row5['l_name']?> </option>
-						     		<?php while ($row6=$stmt6->fetch()) { ?>
-						     			<option value="<?=$row6['l_username']?>"> <?=$row6['l_name']?> </option>
-						     		<?php } ?>
-						     	</select>
-					     	</div>  
-					     <?php } ?> 	       
-					     <div class="form-group mb-4">
-					     	<label class="text-primary mb-2"> รหัส Join คลาส : </label>
-					     	<input type="text" name="class_password" id="class_password"  class="form-control col-12" value="<?=$row5['c_password']?>">
-					     </div>
-					   </div>    	    
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				        <button type="submit" class="btn btn-primary" id="edit_class_submit<?=$row5['id']?>" name="edit_class_submit"> แก้ไขคลาส </button>
-				      </div>
-				    </div>
-				  </div>
-				</div>
-			</form>
-
-			<!-- Modal delete Class -->
-			<form action="delete_class.php" method="post">
-			<div class="modal fade" id="delete_class?id=<?=$row5['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				  <div class="modal-dialog modal-dialog-centered" role="document">
-				    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
-				      <div class="modal-header">
-				        <h3 class="modal-title" id="exampleModalLabel">Delete Class</h3>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				          <span aria-hidden="true">&times;</span>
-				        </button>
-				      </div>
-				      <div class="modal-body">
-				      	<input type="hidden" name="id" class="form-control col-12" required="" value="<?=$row5['id']?>">
-					     <label class="text-dark" style="font-size: 20px;">คุณแน่ใจหรือไม่ ที่จะลบ : </label><br>
-					     <label class="text-danger" style="font-size: 20px;"><?=$row5['c_id']?>&nbsp;<?=$row5['c_name']?> </label>
-					   </div>    	    
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				        <button type="submit" class="btn btn-danger" id="delete_class_submit"> ลบคลาส </button>
-				      </div>
-				    </div>
-				  </div>
-				</div>
-			</form>
-			<?php } ?>
+							<!-- Modal Edit Class -->
+							<form action="edit_class.php" method="post" >
+							<div class="modal fade" id="edit_class?id=<?=$row8['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								  <div class="modal-dialog modal-dialog-centered" role="document">
+								    <div class="modal-content " style="box-shadow: 0px 0px 50px 25px #1e272e;">
+								      <div class="modal-header">
+								        <h3 class="modal-title" id="exampleModalLabel">Edit Class</h3>
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+								      </div>
+								      <div class="modal-body">
+								      	<input type="hidden" name="id" class="form-control col-12"  value="<?=$row8['id']?>">
+									     <div class="form-group mb-4">
+									     	<label class="text-primary"> รหัสวิชา : </label>
+									     	<input type="text" name="class_id" class="form-control" id="class_id<?=$row8['id']?>" value="<?=$row8['c_id']?>">
+									     </div>
+									     <div class="form-group mb-4">
+									     	<label class="text-primary"> ชื่อรายวิชา : </label>
+									     	<input type="text" name="class_name" class="form-control" id="class_name<?=$row8['id']?>" value="<?=$row8['c_name']?>">
+									     </div> 
+									     <?php date_default_timezone_set('Asia/Bangkok');
+												$date = date('Y'); 
+												$dateThai = $date + 542;
+										?> 
+									     <div class="form-group mb-4">
+									     	<label class="text-primary"> ปีการศึกษา : </label>
+									     	<select class="form-control" name="class_year" id="class_year<?=$row8['id']?>">
+									     		<option selected="" value="<?=$row8['c_year']?>"> <?=$row8['c_year']?> </option>
+									     		<?php for ($i=$dateThai; $i <= 3000 ; $i++) { ?>
+									     			<option value="<?=$i?>"> <?=$i?> </option>
+									     		<?php } ?>
+									     	</select>
+									     </div>  
+									     <div class="form-group mb-4">
+									     	<label class="text-primary"> ภาคการศึกษา : </label>
+									     	<select class="form-control" name="class_term" id="class_term<?=$row8['id']?>">
+									     		<option selected="" value="<?=$row8['c_term']?>"> <?php if ($row8['c_term'] == 1) { ?>
+									     			เทอมต้น
+									     		<?php } elseif ($row8['c_term'] == 2) { ?>
+									     			เทอมปลาย
+									     		<?php } elseif ($row8['c_term'] == 3) { ?>
+									     			ภาคฤดูร้อน
+									     		<?php } ?> </option>
+									     		<option value="1"> เทอมต้น </option>
+									     		<option value="2"> เทอมปลาย </option>
+									     		<option value="3"> ภาคฤดูร้อน </option>
+									     	</select>
+									     </div>
+									      <div class="form-group mb-4">
+									     	<label class="text-primary"> Section : </label>
+									     	<select class="form-control" name="class_sec" id="class_sec<?=$row8['id']?>">
+									     		<option selected="" value="<?=$row8['c_sec']?>"> <?=$row8['c_sec']?> </option>
+									     		<?php for ($sec=1; $sec <=200 ; $sec++) { ?>
+									     			<option value="<?=$sec?>"> <?=$sec?> </option>
+									     		<?php } ?>
+									     	</select>
+									     </div>
+									     <?php if ($_SESSION['permission'] == 2) { ?>
+									     	<div class="form-group mb-4">
+										     	<label class="text-primary"> อาจารย์ผู้สอน : </label>
+										     	<select class="form-control" name="l_username" id="l_username<?=$row8['id']?>">
+										     		<option selected="" value="<?=$row8['l_username']?>"> <?=$row8['l_name']?> </option>
+										     		<?php 
+										     			$stmt9=$pdo->prepare("SELECT * FROM teacher");
+														$stmt9->execute();
+										     			while ($row9=$stmt9->fetch()) { ?>
+										     			<option value="<?=$row9['l_username']?>"> <?=$row9['l_name']?> </option>
+										     		<?php } ?>
+										     	</select>
+									     	</div>  
+									     <?php } ?> 	       
+									     <div class="form-group mb-4">
+									     	<label class="text-primary mb-2"> รหัส Join คลาส : </label>
+									     	<input type="text" name="class_password" id="class_password"  class="form-control col-12" value="<?=$row8['c_password']?>">
+									     </div>
+									   </div>    	    
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								        <button type="submit" class="btn btn-primary" id="edit_class_submit<?=$row8['id']?>" name="edit_class_submit"> แก้ไขคลาส </button>
+								      </div>
+								    </div>
+								  </div>
+								</div>
+							</form>
+					    <?php }
+					} ?>	
 			<?php } ?>
 
 
