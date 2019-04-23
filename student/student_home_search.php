@@ -237,37 +237,81 @@
 
 	<div style="padding-top: 50px;padding-bottom: 50px;min-height: 850px;background-color: #ecf0f1;">
 		<div class="form-inline d-flex " style="margin-left: 20px;">
-			<?php while ($row2=$stmt2->fetch()) {?>
+			<?php 
+			if (!isset($_POST['search_type1']) && !isset($_POST['keyword1'])) {
+				while ($row2=$stmt2->fetch()) { ?>
 				<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
 				<div class="card bg-info zoomclass mb-4">
 					<a href="detail_class.php?c_id=<?=$row2['c_id']?>">
 						<div class="card-header" style=" margin-top: 5px;">
-												<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row2['c_id']?> </p>
-											</div>
-											<div class="card-body" style="margin-top: 5px;">
-												<div class="from-group mr-sm-2">
-													<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row2['c_name']?> </p>
-												</div>
-												<div class="from-group mr-sm-2">
-													<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row2['c_sec']?> </p>
-												</div>		
-												<div class="from-group mr-sm-2">
-												<?php if ($row2['c_term'] == 1) { ?>
-													<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
-												<?php } elseif ($row2['c_term'] == 2) { ?>
-													<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
-												<?php } elseif ($row2['c_term'] == 3) { ?>
-													<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
-												<?php } ?>								
-												</div>
-												<div class="from-group mr-sm-2">	
-													<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row2['c_year']?> </p>
-												</div>						 
-											</div>
+							<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row2['c_id']?> </p>
+						</div>
+						<div class="card-body" style="margin-top: 5px;">
+							<div class="from-group mr-sm-2">
+								<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row2['c_name']?> </p>
+							</div>
+							<div class="from-group mr-sm-2">
+								<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row2['c_sec']?> </p>
+							</div>		
+							<div class="from-group mr-sm-2">
+								<?php if ($row2['c_term'] == 1) { ?>
+									<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
+								<?php } elseif ($row2['c_term'] == 2) { ?>
+									<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
+								<?php } elseif ($row2['c_term'] == 3) { ?>
+									<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
+								<?php } ?>								
+							</div>
+							<div class="from-group mr-sm-2">	
+								<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row2['c_year']?> </p>
+							</div>						 
+						</div>
 					</a>
 				</div>
 			</div>		
-			<?php } ?>		
+			<?php } 		
+			} elseif (isset($_POST['search_type1']) && isset($_POST['keyword1'])) {
+				$strSQL = "SELECT * FROM enroll WHERE s_id = '".$rowUser['s_id']."' ";
+				if($_POST["search_type1"] != "" and  $_POST["keyword1"]  != '')
+				{
+					$strSQL .= " AND (".$_POST["search_type1"]." LIKE '%".$_POST["keyword1"]."%') ORDER BY c_id , c_sec ASC ";
+				} 
+
+				$stmt3 = $pdo->prepare($strSQL);
+				$stmt3->execute();
+				while ($row3=$stmt3->fetch()) { ?>
+					<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
+						<div class="card bg-info zoomclass mb-4">
+							<a href="detail_class.php?c_id=<?=$row3['c_id']?>">
+								<div class="card-header" style=" margin-top: 5px;">
+									<p class="card-text text-white" style="font-size: 20px;"> รหัสวิชา : <?=$row3['c_id']?> </p>
+								</div>
+								<div class="card-body" style="margin-top: 5px;">
+									<div class="from-group mr-sm-2">
+										<p class="card-text text-white" style="font-size: 20px;"> ชื่อวิชา : <?=$row3['c_name']?> </p>
+									</div>
+									<div class="from-group mr-sm-2">
+										<p class="card-text text-white" style="font-size: 20px;"> Section : <?=$row3['c_sec']?> </p>
+									</div>		
+									<div class="from-group mr-sm-2">
+										<?php if ($row3['c_term'] == 1) { ?>
+											<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมต้น </p>
+										<?php } elseif ($row3['c_term'] == 2) { ?>
+											<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : เทอมปลาย </p>
+										<?php } elseif ($row3['c_term'] == 3) { ?>
+											<p class="card-text text-white" style="font-size: 20px;"> ภาคการศึกษา : ภาคฤดูร้อน </p>
+										<?php } ?>								
+									</div>
+									<div class="from-group mr-sm-2">	
+										<p class="card-text text-white" style="font-size: 20px;"> ปีการศึกษา : <?=$row3['c_year']?> </p>
+									</div>						 
+								</div>
+							</a>
+						</div>
+					</div>		
+				<?php }
+			} ?>
+			
 		</div>	
 	</div>
 

@@ -82,12 +82,7 @@
 			    		<option value="c_sec">section</option>
 			    	</select>
 			    	<input type="text" name="keyword1" id="keyword1" class="form-control mr-sm-2">
-			    	<select class="form-control mr-sm-2" name="keyword1" id="keyword1">
-			    		<option selected="" value=""> ค้นหาจากภาคการเรียน </option>
-			    		<option value="1"> เทอมต้น </option>
-			    		<option value="2"> เทอมปลาย </option>
-			    		<option value="3"> ภาคฤดูร้อน </option>
-			    	</select>
+			    	
 			    	<button class="btn btn-success" type="submit" id="submit_button_search1" value="search"><i class="fas fa-search"></i> ค้นหา </button>
 			    </div>
 		    </form>
@@ -192,12 +187,7 @@
 			    		<option value="l_name">อาจารย์ประจำวิชา</option>
 			    	</select>
 			    	<input type="text" name="keyword2" id="keyword2" class="form-control mr-sm-2">
-			    	<select class="form-control mr-sm-2" name="keyword2" id="keyword2">
-			    		<option selected="" value=""> ค้นหาจากภาคการเรียน </option>
-			    		<option value="1"> เทอมต้น </option>
-			    		<option value="2"> เทอมปลาย </option>
-			    		<option value="3"> ภาคฤดูร้อน </option>
-			    	</select>
+			    	
 			    	<button class="btn btn-success" type="submit" id="submit_button_search" value="search"><i class="fas fa-search"></i> ค้นหา </button>
 			    </div>
 		    </form>
