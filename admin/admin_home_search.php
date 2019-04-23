@@ -182,7 +182,7 @@
 		    <form action="admin_home_search.php" name="search_form2" method="post">
 		    	 <div class="form-inline mr-sm-2">
 			    	<select class="form-control mr-sm-2" name="search_type2" id="search_type2">
-			    		<option selected="" value=""> เลือกประเภทการค้นหา </option>
+			    		<option selected=""> เลือกประเภทการค้นหา </option>
 			    		<option value="c_id">รหัสวิชา</option>
 			    		<option value="c_name">ชื่อวิชา</option>
 			    		<option value="c_password">รหัสเข้าคลาส</option>
@@ -201,6 +201,7 @@
 			    	<button class="btn btn-success" type="submit" id="submit_button_search" value="search"><i class="fas fa-search"></i> ค้นหา </button>
 			    </div>
 		    </form>
+		   
 		    <div class="form-inline my-2 my-lg-0 mr-sm-2  col-3">
 		    	<a href="" class="btn btn-primary  dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-user-tie"></i> <?= $rowName1["t_name"] ?> </a>
 		    	<div class="dropdown-menu col-10">
@@ -663,12 +664,14 @@
 
 						  } elseif (isset($_POST['search_type1']) && isset($_POST['keyword1'])) {
 						  	
-						    $stmt7=$pdo->prepare("SELECT * FROM classroom WHERE l_username = ? AND (? LIKE ?) ORDER BY c_id , c_sec ASC");
-						    $stmt7->bindParam(1,$rowUser['l_username']);
-						    $stmt7->bindParam(2,'%'.$_POST['search_type1'].'%');
-						    $stmt7->bindParam(3,'%'.$_POST['keyword1'].'%');
-						    $stmt7->execute();
+						    $strSQL = "SELECT * FROM classroom WHERE l_username = '".$rowUser['l_username']."' ";
+						    if($_POST["search_type1"] != "" and  $_POST["keyword1"]  != '')
+						    {
+						      $strSQL .= " AND (".$_POST["search_type1"]." LIKE '%".$_POST["keyword1"]."%') ORDER BY c_id , c_sec ASC ";
+						    } 
 
+						    $stmt7 = $pdo->prepare($strSQL);
+						    $stmt7->execute();
 						    while ($row7=$stmt7->fetch()) { ?>
 						    	<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">
 									<div class="card  bg-info zoomclass mb-4">
@@ -945,12 +948,14 @@
 							</form>
 						<?php }
 					} elseif (isset($_POST['search_type2']) && isset($_POST['keyword2'])) {
+						
+						$strSQL2 = "SELECT * FROM classroom WHERE t_username = '".$rowUser1['t_username']."' ";
+					    if($_POST["search_type2"] != "" and  $_POST["keyword2"]  != '') {
+					      $strSQL2 .= " AND (".$_POST["search_type2"]." LIKE '%".$_POST["keyword2"]."%' ) ";
+					    } 
 
-						 	$stmt8=$pdo->prepare("SELECT * FROM classroom WHERE t_username = ? AND (? LIKE ?) ORDER BY c_id , c_sec ASC");
-						    $stmt8->bindParam(1,$rowUser1['t_username']);
-						    $stmt8->bindParam(2,'%'.$_POST['search_type2'].'%');
-						    $stmt8->bindParam(3,'%'.$_POST['keyword2'].'%');
-						    $stmt8->execute();
+					    $stmt8 = $pdo->prepare($strSQL2);
+					    $stmt8->execute();
 
 					    while ($row8=$stmt8->fetch()) { ?>
 					    	<div class="card-deck my-2 my-lg-0 mr-sm-2 mb-4">

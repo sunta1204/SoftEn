@@ -13,7 +13,7 @@
 	 }
 
 	$stmt2=$pdo->prepare("SELECT * FROM classroom WHERE id = ?");
-	$stmt2->bindParam(1,$_GET['id']);
+	$stmt2->bindParam(1,$_POST['id']);
 	$stmt2->execute();
 	while ($row2=$stmt2->fetch()) {
 		$rowID['id'] = $row2['id'];
@@ -28,10 +28,6 @@
 	$stmt3=$pdo->prepare("SELECT * FROM enroll WHERE c_id = ?");
 	$stmt3->bindParam(1,$_GET['c_id']);
 	$stmt3->execute();
-
-	$stmt4=$pdo->prepare("SELECT * FROM news WHERE c_id = ? ");
-	$stmt4->bindParam(1,$_GET['c_id']);
-	$stmt4->execute();
 
 	$stmt5 = $pdo->prepare("SELECT * FROM ta WHERE t_username = ?");
 	$stmt5->bindParam(1,$_SESSION["username"]);
@@ -105,7 +101,7 @@
 		    </div>
 		    <div class="form-inline my-2 my-lg-0 mr-sm-2 col-md-2">
 		    	<a href="" class="btn btn-primary  dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-user-tie"></i> <?= $rowName["l_name"] ?> </a>
-		    	<div class="dropdown-menu col-10">	
+		    	<div class="dropdown-menu col-10">
 		    		<button class="dropdown-item" data-target="#profile" data-toggle="modal"> ข้อมูลส่วนตัว </button>
 		    		<button class="dropdown-item" data-target="#editProfile" data-toggle="modal"> แก้ไขข้อมูลส่วนตัว </button>
 		    		<div class="dropdown-divider"></div>
@@ -328,29 +324,6 @@
 	<?php } ?>
 
 	<?php 
-		if (!empty($_COOKIE["add_student_null"])){ ?>
-			<script type="text/javascript">
-    			$(window).on('load',function(){
-        			$('#add_fail').alert('fade');
-        				setTimeout(function(){
-        					$('#add_fail').alert('close');
-        				}, 3000);
-    				});
-    				$('#add_fail').click(function(){
-    					$('add_fail').alert('close');
-    				});
-			</script>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_fail">
-				<center>
-					<strong>Add Student Failed!</strong> กรุณาเลือกนักศึกษา
-				</center>				
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-	<?php } ?>
-
-	<?php 
 		if (!empty($_COOKIE["add_student_same"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
@@ -514,187 +487,382 @@
 							<a href="admin_home.php" class="btn btn-danger btn-lg col-12"> ย้อนกลับ </a>
 						</div>				
 					</div>
-
-					<div style="background-color:#f1f2f6;min-width: 85%;min-height: 500px;padding: 50px;">
-						<div class="table-responsive-sm" >
-						<table class="table table-dark table-hover" style="border-radius: 20px; box-shadow: 0px 0px 50px 25px #1e272e;">
-							<thead class="text-white bg-info" style="font-size: 20px;">
-								<tr>
-									<th>รหัสนักศึกษา</th>
-									<th>ชื่อ-นามสกุล</th>
-									<th>สาขาวิชา</th>
-									<th>สถานะ</th>
-									<th>หมายเหตุ</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody style="font-size: 16px;">
-								
-								<?php while ($row7=$stmt7->fetch()) { ?>
-									
-									<tr>
-										<td><?=$row7['s_id']?></td>
-										<td><?=$row7['s_name']?></td>
-										<td><?=$row7['s_department']?></td>
-										<?php if ($row7['status'] == 1) { ?>
-											<td class="text-success">ลงทะเบียน</td>
-										<?php }if ($row7['status'] == 2) { ?>
-											<td class="text-warning">ถอนรายวิชา</td>
-										<?php }if ($row7['status'] == 3) { ?>
-											<td class="text-danger">ลาออก</td>
-										<?php } if ($row7['status'] == 4) { ?>
-											<td class="text-warning">ย้าย Section</td>
-										<?php } ?> 
-										<?php 
-										if ($row7['sec_from'] != NULL && $row7['sec_transfer'] != NULL) { ?>
-											<td class="text-warning"> ย้ายจาก section : <?=$row7['sec_from']?> ไปยัง section : <?=$row7['sec_transfer']?> </td>
-										<?php } else { ?>
-											<td></td>
-										<?php }
-										?>								
-										<td> 
-											<?php 
-											if ($row7['status'] == 1 && $row7['sec_from'] == NULL && $row7['sec_transfer'] == NULL) { ?>
-												<button class="btn btn-warning" data-toggle="modal" id="edit_student<?=$row7['enroll_id']?>" data-target="#edit_student<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข section</button> &nbsp;||&nbsp;
-												<button class="btn btn-warning" data-toggle="modal" id="edit_student_sec<?=$row7['enroll_id']?>" data-target="#edit_student_sec<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> 
-											<?php } elseif ($row7['sec_transfer'] == $row7['c_sec']) { ?>
-												
-												<button class="btn btn-warning" data-toggle="modal" id="edit_student_sec<?=$row7['enroll_id']?>" data-target="#edit_student_sec<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> 
-											<?php }
-											?>
+					<?php 
+						if (!isset($_POST['search_type1']) && !isset($_POST['keyword1'])) { ?>
+							<div style="background-color:#f1f2f6;min-width: 85%;min-height: 500px;padding: 50px;">
+								<div class="table-responsive-sm" >
+								<table class="table table-dark table-hover" style="border-radius: 20px; box-shadow: 0px 0px 50px 25px #1e272e;">
+									<thead class="text-white bg-info" style="font-size: 20px;">
+										<tr>
+											<th>รหัสนักศึกษา</th>
+											<th>ชื่อ-นามสกุล</th>
+											<th>สาขาวิชา</th>
+											<th>สถานะ</th>
+											<th>หมายเหตุ</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody style="font-size: 16px;">
+										
+										<?php while ($row7=$stmt7->fetch()) { ?>
 											
-										</td>
-									</tr>
+											<tr>
+												<td><?=$row7['s_id']?></td>
+												<td><?=$row7['s_name']?></td>
+												<td><?=$row7['s_department']?></td>
+												<?php if ($row7['status'] == 1) { ?>
+													<td class="text-success">ลงทะเบียน</td>
+												<?php }if ($row7['status'] == 2) { ?>
+													<td class="text-warning">ถอนรายวิชา</td>
+												<?php }if ($row7['status'] == 3) { ?>
+													<td class="text-danger">ลาออก</td>
+												<?php } if ($row7['status'] == 4) { ?>
+													<td class="text-warning">ย้าย Section</td>
+												<?php } ?>
+												<?php 
+												if ($row7['sec_from'] != NULL && $row7['sec_transfer'] != NULL) { ?>
+													<td class="text-warning"> ย้ายจาก section : <?=$row7['sec_from']?> ไปยัง section : <?=$row7['sec_transfer']?> </td>
+												<?php } else { ?>
+													<td></td>
+												<?php }
+												?>								
+												<td> 
+													<?php 
+													if ($row7['status'] == 1 && $row7['sec_from'] == NULL && $row7['sec_transfer'] == NULL) { ?>
+														<button class="btn btn-warning" data-toggle="modal" id="edit_student<?=$row7['enroll_id']?>" data-target="#edit_student<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข section</button> &nbsp;||&nbsp;
+														<button class="btn btn-warning" data-toggle="modal" id="edit_student_sec<?=$row7['enroll_id']?>" data-target="#edit_student_sec<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> 
+													<?php } elseif ($row7['sec_transfer'] == $row7['c_sec']) { ?>
+														<button class="btn btn-warning" data-toggle="modal" id="edit_student<?=$row7['enroll_id']?>" data-target="#edit_student<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข section</button> &nbsp;||&nbsp;
+														<button class="btn btn-warning" data-toggle="modal" id="edit_student_sec<?=$row7['enroll_id']?>" data-target="#edit_student_sec<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> 
+													<?php }
+													?>
+													
+												</td>
+											</tr>
 
-									<!-- Modal Delete Student  -->
-									<form action="delete_student.php" name="edit_student_form" method="post">
-										<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-										  <div class="modal-dialog modal-dialog-centered" role="document">
-										    <div class="modal-content">
-										      <div class="modal-header">
-										        <h5 class="modal-title" id="exampleModalLongTitle">Delete Student</h5>
-										        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										          <span aria-hidden="true">&times;</span>
-										        </button>
-										      </div>
-										      <div class="modal-body">
-										      	<input type="hidden" name="enroll_id" value="<?=$row7['enroll_id']?>">
-										      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
-				      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
-				      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
-												<label class="text-primary" style="font-size: 20px;"> แน่ใจหรือไม่ที่จะลบ : </label>&nbsp;&nbsp;<label class="text-danger"><?=$row7['s_id']?>&nbsp;<?=$row7['s_name']?> </label>
-										      </div>
-										      <div class="modal-footer">
-										        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-										        <button type="submit" class="btn btn-primary" id="delete_submit_button">ลบ</button>
-										      </div>
-										    </div>
-										  </div>
-										</div>
-									</form>
-								
-									<!-- Modal Edit Student  -->
-									<form action="edit_student_form.php" name="edit_student_form<?=$row7['enroll_id']?>" method="post">
-										<div class="modal fade" id="edit_student<?=$row7['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-										  <div class="modal-dialog modal-dialog-centered" role="document">
-										    <div class="modal-content">
-										      <div class="modal-header">
-										        <h5 class="modal-title" id="exampleModalLongTitle">Edit Student Section</h5>
-										        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										          <span aria-hidden="true">&times;</span>
-										        </button>
-										      </div>
-										      <div class="modal-body">
-										      	<input type="hidden" name="enroll_id" value="<?=$row7['enroll_id']?>">
-										      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
-				      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
-				      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
-				      							<input type="hidden" name="c_year" value="<?=$rowCYEAR['c_year']?>">
-				      							<input type="hidden" name="c_term" value="<?=$rowCTERM['c_term']?>">
-										        <label class="text-primary" style="font-size: 20px;">ไปที่หน้าแก้ไขข้อมูลของ : </label>&nbsp;&nbsp; <label class="text-danger" style="font-size: 18px;"><?=$row7['s_name']?></label>
-										      </div>
+											<!-- Modal Delete Student  -->
+											<form action="delete_student.php" name="edit_student_form" method="post">
+												<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												  <div class="modal-dialog modal-dialog-centered" role="document">
+												    <div class="modal-content">
+												      <div class="modal-header">
+												        <h5 class="modal-title" id="exampleModalLongTitle">Delete Student</h5>
+												        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+												      </div>
+												      <div class="modal-body">
+												      	<input type="hidden" name="enroll_id" value="<?=$row7['enroll_id']?>">
+												      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+						      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+						      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+														<label class="text-primary" style="font-size: 20px;"> แน่ใจหรือไม่ที่จะลบ : </label>&nbsp;&nbsp;<label class="text-danger"><?=$row7['s_id']?>&nbsp;<?=$row7['s_name']?> </label>
+												      </div>
+												      <div class="modal-footer">
+												        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+												        <button type="submit" class="btn btn-primary" id="delete_submit_button">ลบ</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+											</form>
+										
+											<!-- Modal Edit Student  -->
+											<form action="edit_student_form.php" name="edit_student_form<?=$row7['enroll_id']?>" method="post">
+												<div class="modal fade" id="edit_student<?=$row7['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												  <div class="modal-dialog modal-dialog-centered" role="document">
+												    <div class="modal-content">
+												      <div class="modal-header">
+												        <h5 class="modal-title" id="exampleModalLongTitle">Edit Student Section</h5>
+												        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+												      </div>
+												      <div class="modal-body">
+												      	<input type="hidden" name="enroll_id" value="<?=$row7['enroll_id']?>">
+												      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+						      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+						      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+						      							<input type="hidden" name="c_year" value="<?=$rowCYEAR['c_year']?>">
+						      							<input type="hidden" name="c_term" value="<?=$rowCTERM['c_term']?>">
+												        <label class="text-primary" style="font-size: 20px;">ไปที่หน้าแก้ไขข้อมูลของ : </label>&nbsp;&nbsp; <label class="text-danger" style="font-size: 18px;"><?=$row7['s_name']?></label>
+												      </div>
 
-										      
-										      <div class="modal-footer">
-										        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-										        <button type="submit" class="btn btn-primary" id="edit_section_submit_button<?=$row7['enroll_id']?>">แก้ไข</button>
-										      </div>
-										    </div>
-										  </div>
-										</div>
-									</form>
+												      
+												      <div class="modal-footer">
+												        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+												        <button type="submit" class="btn btn-primary" id="edit_section_submit_button<?=$row7['enroll_id']?>">แก้ไข</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+											</form>
 
-									<!-- Modal Edit Student Status  -->
-									<form action="edit_student_status.php" name="edit_student_sec_form<?=$row7['enroll_id']?>" method="post">
-										<div class="modal fade" id="edit_student_sec<?=$row7['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-										  <div class="modal-dialog modal-dialog-centered" role="document">
-										    <div class="modal-content">
-										      <div class="modal-header">
-										        <h5 class="modal-title" id="exampleModalLongTitle">Edit Student Satus</h5>
-										        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										          <span aria-hidden="true">&times;</span>
-										        </button>
-										      </div>
-										      <div class="modal-body">
-										      	<input type="hidden" name="enroll_id" value="<?=$row7['enroll_id']?>">
-										      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
-				      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
-				      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
-				      							<input type="hidden" name="c_year" value="<?=$rowCYEAR['c_year']?>">
-				      							<input type="hidden" name="c_term" value="<?=$rowCTERM['c_term']?>">
-										       <div class="form-group">
-										       		<label class="text-primary" style="font-size: 20px;"> รหัสนักศึกษา </label>
-										       		<input type="text" name="s_id" value="<?=$row7['s_id']?>" class="form-control" readonly="">
-										       </div>
-										       <div class="form-group">
-										       		<label class="text-primary" style="font-size: 20px;"> ชื่อ-นามสกุล </label>
-										       		<input type="text" name="s_name" value="<?=$row7['s_name']?>" class="form-control" readonly="">
-										       </div>
-										       <div class="form-group">
-										       		<label class="text-primary" style="font-size: 20px;"> สาขาวิชา </label>
-										       		<input type="text" name="s_department" value="<?=$row7['s_department']?>" class="form-control" readonly="">
-										       </div>
-										       <div class="form-group">
-										       		<label class="text-primary" style="font-size: 20px;"> สถานะ </label>
-										       		<?php if ($row7['status'] == 1) { ?>
-														<select name="status" id="status<?=$row7['enroll_id']?>" class="form-control">
-															<option value="1" selected=""> ลงทะเบียน </option>
-															<option value="2"> ถอนรายวิชา </option>
-															<option value="3"> ลาออก </option>
-														</select>
-													<?php } elseif ($row7['status'] == 2) { ?>
-														<select name="status" id="status<?=$row7['enroll_id']?>" class="form-control">
-															<option value="2" selected=""> ถอนรายวิชา </option>
-															<option value="1"> ลงทะเบียน </option>
-															<option value="3"> ลาออก </option>
-														</select>
-													<?php } elseif ($row7['status'] == 3) { ?>
-														<select name="status" id="status<?=$row7['enroll_id']?>" class="form-control">
-															<option value="3" selected=""> ลาออก </option>
-															<option value="1"> ลงทะเบียน </option>
-															<option value="2"> ถอนรายวิชา </option>
-														</select>
-													<?php } ?>
-										       </div>
-										      </div>
+											<!-- Modal Edit Student Status  -->
+											<form action="edit_student_status.php" name="edit_student_sec_form<?=$row7['enroll_id']?>" method="post">
+												<div class="modal fade" id="edit_student_sec<?=$row7['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												  <div class="modal-dialog modal-dialog-centered" role="document">
+												    <div class="modal-content">
+												      <div class="modal-header">
+												        <h5 class="modal-title" id="exampleModalLongTitle">Edit Student Satus</h5>
+												        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+												      </div>
+												      <div class="modal-body">
+												      	<input type="hidden" name="enroll_id" value="<?=$row7['enroll_id']?>">
+												      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+						      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+						      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+						      							<input type="hidden" name="c_year" value="<?=$rowCYEAR['c_year']?>">
+						      							<input type="hidden" name="c_term" value="<?=$rowCTERM['c_term']?>">
+												       <div class="form-group">
+												       		<label class="text-primary" style="font-size: 20px;"> รหัสนักศึกษา </label>
+												       		<input type="text" name="s_id" value="<?=$row7['s_id']?>" class="form-control" readonly="">
+												       </div>
+												       <div class="form-group">
+												       		<label class="text-primary" style="font-size: 20px;"> ชื่อ-นามสกุล </label>
+												       		<input type="text" name="s_name" value="<?=$row7['s_name']?>" class="form-control" readonly="">
+												       </div>
+												       <div class="form-group">
+												       		<label class="text-primary" style="font-size: 20px;"> สาขาวิชา </label>
+												       		<input type="text" name="s_department" value="<?=$row7['s_department']?>" class="form-control" readonly="">
+												       </div>
+												       <div class="form-group">
+												       		<label class="text-primary" style="font-size: 20px;"> สถานะ </label>
+												       		<?php if ($row7['status'] == 1) { ?>
+																<select name="status" class="form-control">
+																	<option value="1" selected=""> ลงทะเบียน </option>
+																	<option value="2"> ถอนรายวิชา </option>
+																	<option value="3"> ลาออก </option>
+																</select>
+															<?php } elseif ($row7['status'] == 2) { ?>
+																<select name="status" class="form-control">
+																	<option value="2" selected=""> ถอนรายวิชา </option>
+																	<option value="1"> ลงทะเบียน </option>
+																	<option value="3"> ลาออก </option>
+																</select>
+															<?php } elseif ($row7['status'] == 3) { ?>
+																<select name="status" class="form-control">
+																	<option value="3" selected=""> ลาออก </option>
+																	<option value="1"> ลงทะเบียน </option>
+																	<option value="2"> ถอนรายวิชา </option>
+																</select>
+															<?php } ?>
+												       </div>
+												      </div>
 
-										      
-										      <div class="modal-footer">
-										        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-										        <button type="submit" class="btn btn-primary" id="edit_status_submit_button<?=$row7['enroll_id']?>">แก้ไข</button>
-										      </div>
-										    </div>
-										  </div>
-										</div>
-									</form>
+												      
+												      <div class="modal-footer">
+												        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+												        <button type="submit" class="btn btn-primary" id="edit_status_submit_button<?=$row7['enroll_id']?>">แก้ไข</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+											</form>
 
-								<?php } ?>	
+										<?php } ?>	
 
-							</tbody>
-						</table>
-						</div>
-					</div>			
-			</div>
+									</tbody>
+								</table>
+								</div>
+							</div>			
+					</div> 
+						<?php } elseif (isset($_POST['search_type1']) && isset($_POST['keyword1'])) { ?>	
+						    <div style="background-color:#f1f2f6;min-width: 85%;min-height: 500px;padding: 50px;">
+								<div class="table-responsive-sm" >
+								<table class="table table-dark table-hover" style="border-radius: 20px; box-shadow: 0px 0px 50px 25px #1e272e;">
+									<thead class="text-white bg-info" style="font-size: 20px;">
+										<tr>
+											<th>รหัสนักศึกษา</th>
+											<th>ชื่อ-นามสกุล</th>
+											<th>สาขาวิชา</th>
+											<th>สถานะ</th>
+											<th>หมายเหตุ</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody style="font-size: 16px;">
+										
+										<?php 
+											$strSQL = "SELECT * FROM enroll WHERE c_id = '".$rowCID['c_id']."' AND c_sec = '".$rowCSEC['c_sec']."' AND c_term = '".$rowCTERM['c_term']."' AND c_year = '".$rowCYEAR['c_year']."' AND c_name = '".$rowCNAME['c_name']."' ";
+										    if($_POST["search_type1"] != "" and  $_POST["keyword1"]  != '')
+										    {
+										      $strSQL .= " AND (".$_POST["search_type1"]." LIKE '%".$_POST["keyword1"]."%') ";
+										    } 
+
+										    $stmt10 = $pdo->prepare($strSQL);
+										    $stmt10->execute();
+										while ($row10=$stmt10->fetch()) { ?>
+											
+											<tr>
+												<td><?=$row10['s_id']?></td>
+												<td><?=$row10['s_name']?></td>
+												<td><?=$row10['s_department']?></td>
+												<?php if ($row10['status'] == 1) { ?>
+													<td class="text-success">ลงทะเบียน</td>
+												<?php }if ($row10['status'] == 2) { ?>
+													<td class="text-warning">ถอนรายวิชา</td>
+												<?php }if ($row10['status'] == 3) { ?>
+													<td class="text-danger">ลาออก</td>
+												<?php } if ($row10['status'] == 4) { ?>
+													<td class="text-warning">ย้าย Section</td>
+												<?php } ?>
+												<?php 
+												if ($row10['sec_from'] != NULL && $row10['sec_transfer'] != NULL) { ?>
+													<td class="text-warning"> ย้ายจาก section : <?=$row10['sec_from']?> ไปยัง section : <?=$row10['sec_transfer']?> </td>
+												<?php } else { ?>
+													<td></td>
+												<?php }
+												?>								
+												<td> 
+													<?php 
+													if ($row10['status'] == 1 && $row10['sec_from'] == NULL && $row10['sec_transfer'] == NULL) { ?>
+														<button class="btn btn-warning" data-toggle="modal" id="edit_student<?=$row10['enroll_id']?>" data-target="#edit_student<?=$row10['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข section</button> &nbsp;||&nbsp;
+														<button class="btn btn-warning" data-toggle="modal" id="edit_student_sec<?=$row10['enroll_id']?>" data-target="#edit_student_sec<?=$row10['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> 
+													<?php } elseif ($row10['sec_transfer'] == $row10['c_sec']) { ?>
+														<button class="btn btn-warning" data-toggle="modal" id="edit_student<?=$row10['enroll_id']?>" data-target="#edit_student<?=$row10['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข section</button> &nbsp;||&nbsp;
+														<button class="btn btn-warning" data-toggle="modal" id="edit_student_sec<?=$row10['enroll_id']?>" data-target="#edit_student_sec<?=$row10['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> 
+													<?php }
+													?>
+													
+												</td>
+											</tr>
+
+											<!-- Modal Delete Student  -->
+											<form action="delete_student.php" name="edit_student_form" method="post">
+												<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												  <div class="modal-dialog modal-dialog-centered" role="document">
+												    <div class="modal-content">
+												      <div class="modal-header">
+												        <h5 class="modal-title" id="exampleModalLongTitle">Delete Student</h5>
+												        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+												      </div>
+												      <div class="modal-body">
+												      	<input type="hidden" name="enroll_id" value="<?=$row10['enroll_id']?>">
+												      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+						      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+						      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+														<label class="text-primary" style="font-size: 20px;"> แน่ใจหรือไม่ที่จะลบ : </label>&nbsp;&nbsp;<label class="text-danger"><?=$row10['s_id']?>&nbsp;<?=$row10['s_name']?> </label>
+												      </div>
+												      <div class="modal-footer">
+												        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+												        <button type="submit" class="btn btn-primary" id="delete_submit_button">ลบ</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+											</form>
+										
+											<!-- Modal Edit Student  -->
+											<form action="edit_student_form.php" name="edit_student_form<?=$row10['enroll_id']?>" method="post">
+												<div class="modal fade" id="edit_student<?=$row10['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												  <div class="modal-dialog modal-dialog-centered" role="document">
+												    <div class="modal-content">
+												      <div class="modal-header">
+												        <h5 class="modal-title" id="exampleModalLongTitle">Edit Student Section</h5>
+												        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+												      </div>
+												      <div class="modal-body">
+												      	<input type="hidden" name="enroll_id" value="<?=$row10['enroll_id']?>">
+												      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+						      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+						      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+						      							<input type="hidden" name="c_year" value="<?=$rowCYEAR['c_year']?>">
+						      							<input type="hidden" name="c_term" value="<?=$rowCTERM['c_term']?>">
+												        <label class="text-primary" style="font-size: 20px;">ไปที่หน้าแก้ไขข้อมูลของ : </label>&nbsp;&nbsp; <label class="text-danger" style="font-size: 18px;"><?=$row10['s_name']?></label>
+												      </div>
+
+												      
+												      <div class="modal-footer">
+												        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+												        <button type="submit" class="btn btn-primary" id="edit_section_submit_button<?=$row7['enroll_id']?>">แก้ไข</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+											</form>
+
+											<!-- Modal Edit Student Status  -->
+											<form action="edit_student_status.php" name="edit_student_sec_form<?=$row10['enroll_id']?>" method="post">
+												<div class="modal fade" id="edit_student_sec<?=$row10['enroll_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												  <div class="modal-dialog modal-dialog-centered" role="document">
+												    <div class="modal-content">
+												      <div class="modal-header">
+												        <h5 class="modal-title" id="exampleModalLongTitle">Edit Student Satus</h5>
+												        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+												      </div>
+												      <div class="modal-body">
+												      	<input type="hidden" name="enroll_id" value="<?=$row10['enroll_id']?>">
+												      	<input type="hidden" name="id" value="<?=$rowID['id']?>">
+						      							<input type="hidden" name="c_id" value="<?=$rowCID['c_id']?>">
+						      							<input type="hidden" name="c_sec" value="<?=$rowCSEC['c_sec']?>">
+						      							<input type="hidden" name="c_year" value="<?=$rowCYEAR['c_year']?>">
+						      							<input type="hidden" name="c_term" value="<?=$rowCTERM['c_term']?>">
+												       <div class="form-group">
+												       		<label class="text-primary" style="font-size: 20px;"> รหัสนักศึกษา </label>
+												       		<input type="text" name="s_id" value="<?=$row10['s_id']?>" class="form-control" readonly="">
+												       </div>
+												       <div class="form-group">
+												       		<label class="text-primary" style="font-size: 20px;"> ชื่อ-นามสกุล </label>
+												       		<input type="text" name="s_name" value="<?=$row10['s_name']?>" class="form-control" readonly="">
+												       </div>
+												       <div class="form-group">
+												       		<label class="text-primary" style="font-size: 20px;"> สาขาวิชา </label>
+												       		<input type="text" name="s_department" value="<?=$row10['s_department']?>" class="form-control" readonly="">
+												       </div>
+												       <div class="form-group">
+												       		<label class="text-primary" style="font-size: 20px;"> สถานะ </label>
+												       		<?php if ($row10['status'] == 1) { ?>
+																<select name="status" class="form-control">
+																	<option value="1" selected=""> ลงทะเบียน </option>
+																	<option value="2"> ถอนรายวิชา </option>
+																	<option value="3"> ลาออก </option>
+																</select>
+															<?php } elseif ($row10['status'] == 2) { ?>
+																<select name="status" class="form-control">
+																	<option value="2" selected=""> ถอนรายวิชา </option>
+																	<option value="1"> ลงทะเบียน </option>
+																	<option value="3"> ลาออก </option>
+																</select>
+															<?php } elseif ($row10['status'] == 3) { ?>
+																<select name="status" class="form-control">
+																	<option value="3" selected=""> ลาออก </option>
+																	<option value="1"> ลงทะเบียน </option>
+																	<option value="2"> ถอนรายวิชา </option>
+																</select>
+															<?php } ?>
+												       </div>
+												      </div>
+
+												      
+												      <div class="modal-footer">
+												        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+												        <button type="submit" class="btn btn-primary" id="edit_status_submit_button<?=$row7['enroll_id']?>">แก้ไข</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+											</form>
+
+										<?php } ?>	
+
+									</tbody>
+								</table>
+								</div>
+							</div>			
+						</div> 
+						<?php }
+					?>
+
+					
 
 			<!-- Modal Add Student By file -->
 		<form action="add_student_file1.php" method="post" name="add_student_file" id="add_student_file" enctype="multipart/form-data">

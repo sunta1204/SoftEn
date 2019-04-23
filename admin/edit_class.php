@@ -46,7 +46,25 @@
 			} 		?>
 	</body>
 	<?php } elseif ($_SESSION['permission'] == 1) {
-		# code...
+
+				$stmt3=$pdo->prepare("UPDATE classroom SET c_id = ? , c_name = ? , c_year = ? , c_term = ? , c_password = ? , c_sec = ?  WHERE id = ?");
+				$stmt3->bindParam(1,$_POST['class_id']);
+				$stmt3->bindParam(2,$_POST['class_name']);
+				$stmt3->bindParam(3,$_POST['class_year']);
+				$stmt3->bindParam(4,$_POST['class_term']);
+				$stmt3->bindParam(5,$_POST['class_password']);
+				$stmt3->bindParam(6,$_POST['class_sec']);
+				$stmt3->bindParam(7,$_POST['id']);
+				$stmt3->execute();
+				$rowCount3 = $stmt3->rowCount();
+
+				if ($rowCount3 > 0) {
+					setcookie('edit_success',1,time()+5,'/'); 
+					echo "<script type='text/javascript'> window.location.href = 'admin_home.php';</script>";
+				} else {
+					setcookie('edit_error',1,time()+5,'/'); 
+					echo "<script type='text/javascript'> window.location.href = 'admin_home.php';</script>";
+				}
 	}
 
 	
