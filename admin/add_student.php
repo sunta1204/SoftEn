@@ -2,6 +2,7 @@
 	session_start();
 	include '../connect.php';
 
+
 	$stmt=$pdo->prepare("SELECT c_id , c_name , c_password , c_sec , c_year , c_term FROM classroom WHERE id = ?");
 	$stmt->bindParam(1,$_POST['id']);
 	$stmt->execute();
@@ -19,6 +20,8 @@
 	$id = $_POST['id'];
 	$c_id = $rowCId['c_id'];
 	$c_sec = $rowCSec['c_sec'];
+
+	echo $c_id;
 
 	$stmt2=$pdo->prepare("SELECT * FROM teacher WHERE l_username = ?");
 	$stmt2->bindParam(1,$_SESSION['username']);
@@ -42,15 +45,12 @@
 						foreach ($_POST['Ch_INSERT'] as $Ch_INSERT) {
 						
 
-						$stmt6=$pdo->prepare("SELECT * FROM enroll WHERE c_id = ? AND c_name = ? AND c_sec = ? AND c_year = ? AND c_term = ? AND s_id = ? AND s_name = ? AND s_department = ?");
+						$stmt6=$pdo->prepare("SELECT * FROM enroll WHERE c_id = ? AND c_name = ? AND  c_year = ? AND c_term = ? AND s_id = ?");
 						$stmt6->bindParam(1,$c_id);
 						$stmt6->bindParam(2,$rowCName['c_name']);
-						$stmt6->bindParam(3,$rowCSec['c_sec']);
-						$stmt6->bindParam(4,$rowCYear['c_year']);
-						$stmt6->bindParam(5,$rowCTerm['c_term']);
-						$stmt6->bindParam(6,$_POST['s_id'][$Ch_INSERT]);
-						$stmt6->bindParam(7,$_POST['s_name'][$Ch_INSERT]);
-						$stmt6->bindParam(8,$_POST['s_department'][$Ch_INSERT]);
+						$stmt6->bindParam(3,$rowCYear['c_year']);
+						$stmt6->bindParam(4,$rowCTerm['c_term']);
+						$stmt6->bindParam(5,$_POST['s_id'][$Ch_INSERT]);
 						$stmt6->execute();
 						$rowCount2=$stmt6->rowCount();
 
@@ -109,19 +109,16 @@
 						foreach ($_POST['Ch_INSERT'] as $Ch_INSERT) {
 						
 
-						$stmt5=$pdo->prepare("SELECT * FROM enroll WHERE c_id = ? AND c_name = ? AND c_sec = ? AND c_year = ? AND c_term = ? AND s_id = ? AND s_name = ? AND s_department = ?");
+						$stmt5=$pdo->prepare("SELECT * FROM enroll WHERE c_id = ? AND c_name = ? AND  c_year = ? AND c_term = ? AND s_id = ?");
 						$stmt5->bindParam(1,$c_id);
 						$stmt5->bindParam(2,$rowCName['c_name']);
-						$stmt5->bindParam(3,$rowCSec['c_sec']);
-						$stmt5->bindParam(4,$rowCYear['c_year']);
-						$stmt5->bindParam(5,$rowCTerm['c_term']);
-						$stmt5->bindParam(6,$_POST['s_id'][$Ch_INSERT]);
-						$stmt5->bindParam(7,$_POST['s_name'][$Ch_INSERT]);
-						$stmt5->bindParam(8,$_POST['s_department'][$Ch_INSERT]);
+						$stmt5->bindParam(3,$rowCYear['c_year']);
+						$stmt5->bindParam(4,$rowCTerm['c_term']);
+						$stmt5->bindParam(5,$_POST['s_id'][$Ch_INSERT]);
 						$stmt5->execute();
-						$rowCount2=$stmt5->rowCount();
+						$rowCount5=$stmt5->rowCount();
 
-						if ($rowCount2 > 0) {
+						if ($rowCount5 > 0) {
 							setcookie('add_student_same',1,time()+5,'/');
 							echo "<script type='text/javascript'>window.location.href='detail_class.php?id=$id&c_id=$c_id&c_sec=$c_sec';</script>";
 						} else {

@@ -308,18 +308,41 @@
 		if (!empty($_COOKIE["add_student_fail"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
-        			$('#add_fail').alert('fade');
+        			$('#add_student_fail').alert('fade');
         				setTimeout(function(){
-        					$('#add_fail').alert('close');
+        					$('#add_student_fail').alert('close');
         				}, 3000);
     				});
-    				$('#add_fail').click(function(){
-    					$('add_fail').alert('close');
+    				$('#add_student_fail').click(function(){
+    					$('add_student_fail').alert('close');
     				});
 			</script>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_fail">
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_student_fail">
 				<center>
 					<strong>Add Student Failed!</strong> กรุณาลองใหม่อีกครั้ง
+				</center>				
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+	<?php } ?>
+
+	<?php 
+		if (!empty($_COOKIE["add_student_out"])){ ?>
+			<script type="text/javascript">
+    			$(window).on('load',function(){
+        			$('#add_student_out').alert('fade');
+        				setTimeout(function(){
+        					$('#add_student_out').alert('close');
+        				}, 3000);
+    				});
+    				$('#add_student_out').click(function(){
+    					$('add_student_out').alert('close');
+    				});
+			</script>
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_student_out">
+				<center>
+					<strong>Add Student Failed!</strong> นักศึกษาลาออกไปแล้ว ไม่สามารถเพิ่มได้
 				</center>				
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -331,16 +354,16 @@
 		if (!empty($_COOKIE["add_student_null"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
-        			$('#add_fail').alert('fade');
+        			$('#add_student_null').alert('fade');
         				setTimeout(function(){
-        					$('#add_fail').alert('close');
+        					$('#add_student_null').alert('close');
         				}, 3000);
     				});
-    				$('#add_fail').click(function(){
-    					$('add_fail').alert('close');
+    				$('#add_student_null').click(function(){
+    					$('add_student_null').alert('close');
     				});
 			</script>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_fail">
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_student_null">
 				<center>
 					<strong>Add Student Failed!</strong> กรุณาเลือกนักศึกษา
 				</center>				
@@ -354,16 +377,16 @@
 		if (!empty($_COOKIE["add_student_same"])){ ?>
 			<script type="text/javascript">
     			$(window).on('load',function(){
-        			$('#add_fail').alert('fade');
+        			$('#add_student_same').alert('fade');
         				setTimeout(function(){
-        					$('#add_fail').alert('close');
+        					$('#add_student_same').alert('close');
         				}, 3000);
     				});
-    				$('#add_fail').click(function(){
-    					$('add_fail').alert('close');
+    				$('#add_student_same').click(function(){
+    					$('add_student_same').alert('close');
     				});
 			</script>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_fail">
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" id="add_student_same">
 				<center>
 					<strong>Add Student Failed!</strong> มีข้อมูลนักศึกษาใน class section อื่น หรือ อยู่ใน class นี้แล้ว 
 				</center>				
