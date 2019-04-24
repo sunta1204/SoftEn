@@ -8,7 +8,7 @@
 
 	if ($_SESSION['permission'] == 1) {
 		if ($_POST['status'] == 3 || $_POST['status'] == 1) {
-			$stmt=$pdo->prepare("UPDATE enroll SET status = ? WHERE s_id = ? AND s_name = ? AND s_department = ?");
+			$stmt=$pdo->prepare("UPDATE enroll SET status = ? , sec_from = NULL , sec_transfer = NULL WHERE s_id = ? AND s_name = ? AND s_department = ? ");
 		
 			$stmt->bindParam(1,$_POST['status']);
 			$stmt->bindParam(2,$_POST['s_id']);
@@ -25,7 +25,7 @@
 				echo "<script type='text/javascript'>window.location.href='detail_class.php?id=$id&c_id=$c_id&c_sec=$c_sec';</script>";
 			 }
 		} else {
-			$stmt2=$pdo->prepare("UPDATE enroll SET status = ? WHERE s_id = ? AND s_name = ? AND s_department = ?  AND c_id = ? ");
+			$stmt2=$pdo->prepare("UPDATE enroll SET status = ?  WHERE s_id = ? AND s_name = ? AND s_department = ?  AND c_id = ? ");
 		
 			$stmt2->bindParam(1,$_POST['status']);
 			$stmt2->bindParam(2,$_POST['s_id']);
@@ -46,7 +46,7 @@
 		
 	} elseif ($_SESSION['permission'] == 2) {
 		if ($_POST['status'] == 3 || $_POST['status'] == 1) {
-			$stmt=$pdo->prepare("UPDATE enroll SET status = ? WHERE s_id = ? AND s_name = ? AND s_department = ?");
+			$stmt=$pdo->prepare("UPDATE enroll SET status = ? , sec_from = NULL , sec_transfer = NULL WHERE s_id = ? AND s_name = ? AND s_department = ?");
 		
 			$stmt->bindParam(1,$_POST['status']);
 			$stmt->bindParam(2,$_POST['s_id']);
@@ -63,7 +63,7 @@
 				echo "<script type='text/javascript'>window.location.href='detail_class.php?id=$id&c_id=$c_id&c_sec=$c_sec';</script>";
 			 }
 		} else {
-			$stmt2=$pdo->prepare("UPDATE enroll SET status = ? WHERE s_id = ? AND s_name = ? AND s_department = ?  AND c_id = ? ");
+			$stmt2=$pdo->prepare("UPDATE enroll SET status = ?  WHERE s_id = ? AND s_name = ? AND s_department = ?  AND c_id = ? ");
 		
 			$stmt2->bindParam(1,$_POST['status']);
 			$stmt2->bindParam(2,$_POST['s_id']);

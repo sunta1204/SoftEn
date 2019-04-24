@@ -21,7 +21,6 @@
 	$c_id = $rowCId['c_id'];
 	$c_sec = $rowCSec['c_sec'];
 
-	echo $c_id;
 
 	$stmt2=$pdo->prepare("SELECT * FROM teacher WHERE l_username = ?");
 	$stmt2->bindParam(1,$_SESSION['username']);

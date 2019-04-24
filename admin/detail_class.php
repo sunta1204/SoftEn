@@ -580,8 +580,10 @@
 											if ($row7['status'] == 1 && $row7['sec_from'] == NULL && $row7['sec_transfer'] == NULL) { ?>
 												<button class="btn btn-warning" data-toggle="modal" id="edit_student<?=$row7['enroll_id']?>" data-target="#edit_student<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไข section</button> &nbsp;||&nbsp;
 												<button class="btn btn-warning" data-toggle="modal" id="edit_student_sec<?=$row7['enroll_id']?>" data-target="#edit_student_sec<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> 
-											<?php } elseif ($row7['sec_transfer'] == $row7['c_sec']) { ?>
+											<?php } elseif ($row7['status'] == 2 || $row7['status'] == 3)  { ?>
 												
+												
+											<?php } elseif ($row7['sec_transfer'] == $row7['c_sec']) { ?>
 												<button class="btn btn-warning" data-toggle="modal" id="edit_student_sec<?=$row7['enroll_id']?>" data-target="#edit_student_sec<?=$row7['enroll_id']?>"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;แก้ไขสถานะ</button> 
 											<?php }
 											?>
@@ -687,15 +689,11 @@
 														</select>
 													<?php } elseif ($row7['status'] == 2) { ?>
 														<select name="status" id="status<?=$row7['enroll_id']?>" class="form-control">
-															<option value="2" selected=""> ถอนรายวิชา </option>
-															<option value="1"> ลงทะเบียน </option>
-															<option value="3"> ลาออก </option>
+															<option disabled=""> ไม่สามารถแก้ไขได้</option>
 														</select>
 													<?php } elseif ($row7['status'] == 3) { ?>
 														<select name="status" id="status<?=$row7['enroll_id']?>" class="form-control">
-															<option value="3" selected=""> ลาออก </option>
-															<option value="1"> ลงทะเบียน </option>
-															<option value="2"> ถอนรายวิชา </option>
+															<option disabled=""> ไม่สามารถแก้ไขได้</option>
 														</select>
 													<?php } ?>
 										       </div>
